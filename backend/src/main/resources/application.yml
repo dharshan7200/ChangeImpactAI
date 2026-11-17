@@ -1,0 +1,234 @@
+# ============================================================
+# ChangeImpact AI — Application Configuration
+# Active profile: dev
+# ============================================================
+
+spring:
+  application:
+    name: changeimpact-ai
+  profiles:
+    active: ${APP_PROFILE:dev}
+
+  # ---- Data Source ----
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:changeimpact}
+    username: ${DB_USERNAME:changeimpact}
+    password: ${DB_PASSWORD:changeimpact}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+      pool-name: ChangeImpactHikariPool
+
+  # ---- JPA ----
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  # ---- Flyway ----
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+
+  # ---- Redis ----
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+
+  # ---- RabbitMQ ----
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    listener:
+      simple:
+        prefetch: 1
+        retry:
+          enabled: true
+          initial-interval: 2000ms
+          max-attempts: 3
+          max-interval: 10000ms
+          multiplier: 2.0
+
+  # ---- Jackson ----
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+    time-zone: UTC
+
+  # ---- Async ----
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 16
+        queue-capacity: 100
+      thread-name-prefix: changeimpact-async-
+
+  # ---- Spring AI ----
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:sk-dummy-dev-changeimpact-key}
+      audio:
+        speech:
+          enabled: false
+        transcription:
+          enabled: false
+      image:
+        enabled: false
+      moderation:
+        enabled: false
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.1
+          max-tokens: 4096
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
+        schema-name: public
+        table-name: vector_store
+        initialize-schema: false
+
+# ---- Server ----
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+# ---- Actuator ----
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+# ---- API Documentation ----
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    disable-swagger-default-url: true
+  packages-to-scan: com.changeimpact
+
+# ---- Application Properties ----
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:changeimpact-jwt-secret-key-must-be-at-least-32-characters-long-for-hs256}
+      access-token-expiry-ms: ${JWT_ACCESS_EXPIRY_MS:86400000}       # 24 hours for dev convenience
+      refresh-token-expiry-ms: ${JWT_REFRESH_EXPIRY_MS:604800000}  # 7 days
+    bcrypt:
+      strength: ${BCRYPT_STRENGTH:12}
+    allowed-origins:
+      - ${FRONTEND_URL:http://localhost:5173}
+      - http://localhost:3000
+    rate-limit:
+      auth-requests-per-minute: 10
+      api-requests-per-minute: 100
+
+  github:
+    app-id: ${GITHUB_APP_ID:}
+    private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH:}
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}
+    oauth:
+      client-id: ${GITHUB_OAUTH_CLIENT_ID:}
+      client-secret: ${GITHUB_OAUTH_CLIENT_SECRET:}
+    api-base-url: https://api.github.com
+    clone-timeout-seconds: 300
+    max-repo-size-mb: 500
+
+  ingestion:
+    workspace-base-path: ${INGESTION_WORKSPACE_PATH:${java.io.tmpdir}/changeimpact/workspaces}
+    max-concurrent-jobs: 3
+    job-timeout-minutes: 30
+    max-files-per-repository: 10000
+    excluded-paths:
+      - target/
+      - build/
+      - .gradle/
+      - node_modules/
+      - .git/
+      - out/
+      - bin/
+      - generated/
+      - generated-sources/
+
+  rabbitmq:
+    queues:
+      repository-index: changeimpact.repository.index
+      repository-index-dlq: changeimpact.repository.index.dlq
+      analysis-job: changeimpact.analysis.job
+      analysis-job-dlq: changeimpact.analysis.job.dlq
+    exchanges:
+      main: changeimpact.main
+      dead-letter: changeimpact.dead-letter
+
+logging:
+  level:
+    com.changeimpact: INFO
+    org.springframework.security: WARN
+    org.springframework.amqp: WARN
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n"
+  file:
+    name: logs/changeimpact.log
+    max-size: 50MB
+    max-history: 30
+

@@ -1,0 +1,35 @@
+# ============================================================
+# Test profile — uses Testcontainers for real DBs
+# ============================================================
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16:///changeimpact_test?TC_TMPFS=/testtmpfs:rw
+    username: test
+    password: test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    enabled: true
+  jpa:
+    show-sql: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  security:
+    jwt:
+      secret: test-secret-key-for-testing-only-must-be-32-chars-long
+    bcrypt:
+      strength: 4
+  ingestion:
+    workspace-base-path: ${java.io.tmpdir}/changeimpact-test/workspaces
+
+logging:
+  level:
+    com.changeimpact: DEBUG
+    org.flywaydb: DEBUG
+
