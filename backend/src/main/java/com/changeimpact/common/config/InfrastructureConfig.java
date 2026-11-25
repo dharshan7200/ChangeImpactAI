@@ -36,6 +36,9 @@ public class InfrastructureConfig {
 
     private final AppProperties appProperties;
 
+    @org.springframework.beans.factory.annotation.Value("${spring.rabbitmq.listener.simple.auto-startup:true}")
+    private boolean rabbitAutoStartup;
+
     // ---- RabbitMQ ----
 
     @Bean
@@ -58,6 +61,7 @@ public class InfrastructureConfig {
         factory.setMessageConverter(jacksonMessageConverter());
         factory.setPrefetchCount(1);
         factory.setDefaultRequeueRejected(false);
+        factory.setAutoStartup(rabbitAutoStartup);
         // parallel jobs across repositories; jobs on one repository are serialised by WorkspaceManager's lock
         factory.setConcurrentConsumers(1);
         factory.setMaxConcurrentConsumers(Math.max(1, appProperties.getIngestion().getMaxConcurrentJobs()));

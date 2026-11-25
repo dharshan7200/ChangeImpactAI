@@ -13,7 +13,11 @@ services:
       - key: APP_PROFILE
         value: dev
       - key: JAVA_TOOL_OPTIONS
-        value: -Xmx384m -Xms128m -XX:+UseG1GC
+        value: -Xmx220m -Xms64m -XX:MaxMetaspaceSize=112m -XX:ReservedCodeCacheSize=32m -Xss384k -XX:+UseSerialGC
+      - key: RABBITMQ_AUTO_STARTUP
+        value: "false"
+      - key: SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP
+        value: "false"
       - key: GEMINI_API_KEY
         sync: false
       - key: SPRING_DATASOURCE_URL

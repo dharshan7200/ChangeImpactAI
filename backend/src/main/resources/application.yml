@@ -73,6 +73,7 @@ spring:
     virtual-host: ${RABBITMQ_VHOST:/}
     listener:
       simple:
+        auto-startup: ${RABBITMQ_AUTO_STARTUP:true}
         prefetch: 1
         retry:
           enabled: true
