@@ -39,7 +39,7 @@ services:
   # ChangeImpact AI Frontend (React + Vite SPA)
   # ----------------------------------------------------
   - type: web
-    name: changeimpact-frontend
+    name: changeimpact-ai
     runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
