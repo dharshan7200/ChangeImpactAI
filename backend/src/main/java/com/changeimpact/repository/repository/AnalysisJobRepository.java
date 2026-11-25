@@ -21,6 +21,8 @@ public interface AnalysisJobRepository extends JpaRepository<AnalysisJob, UUID> 
     @Query("SELECT j FROM AnalysisJob j WHERE j.repository.id = :repositoryId AND j.status = :status")
     List<AnalysisJob> findByRepositoryIdAndStatus(UUID repositoryId, Status status);
 
+    List<AnalysisJob> findByJobTypeAndStatus(AnalysisJob.JobType jobType, Status status);
+
     @Query("SELECT j FROM AnalysisJob j WHERE j.id = :id AND j.owner.id = :ownerId")
     Optional<AnalysisJob> findByIdAndOwnerId(UUID id, UUID ownerId);
 

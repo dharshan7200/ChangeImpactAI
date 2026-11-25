@@ -22,4 +22,6 @@ public interface ChangeAnalysisRepository extends JpaRepository<ChangeAnalysis, 
 
     List<ChangeAnalysis> findByRepositoryIdAndBaseRefAndHeadRefAndStatusIn(
             UUID repositoryId, String baseRef, String headRef, Collection<ChangeAnalysis.Status> statuses);
+
+    List<ChangeAnalysis> findByStatus(ChangeAnalysis.Status status);
 }
