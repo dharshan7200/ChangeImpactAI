@@ -31,7 +31,7 @@ app:
     allowed-origins:
       - http://localhost:5173
       - http://localhost:3000
-      - https://roberts-writer-hudson-interest.trycloudflare.com
       - https://changeimpactai.loca.lt
       - https://changeimpact-ai.loca.lt
+      - https://changeimpact-frontend.onrender.com
 
