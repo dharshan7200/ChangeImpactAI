@@ -28,7 +28,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class ChangeImpactApplication {
 
     public static void main(String[] args) {
-        System.setProperty("java.net.preferIPv6Addresses", "true");
+        System.setProperty("java.net.preferIPv4Stack", "true");
+        System.setProperty("java.net.preferIPv4Addresses", "true");
         SpringApplication app = new SpringApplication(ChangeImpactApplication.class);
         // checked before any bean or connection is created (prod refuses missing or default secrets)
         app.addListeners(new com.changeimpact.common.config.ProductionSafetyCheck());

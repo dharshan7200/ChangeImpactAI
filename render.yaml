@@ -13,7 +13,7 @@ services:
       - key: APP_PROFILE
         value: dev
       - key: JAVA_TOOL_OPTIONS
-        value: -Xmx180m -Xms48m -XX:MaxMetaspaceSize=180m -XX:ReservedCodeCacheSize=32m -Xss256k -XX:+UseSerialGC -XX:TieredStopAtLevel=1
+        value: -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true -Xmx180m -Xms48m -XX:MaxMetaspaceSize=180m -XX:ReservedCodeCacheSize=32m -Xss256k -XX:+UseSerialGC -XX:TieredStopAtLevel=1
       - key: RABBITMQ_AUTO_STARTUP
         value: "false"
       - key: SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP
