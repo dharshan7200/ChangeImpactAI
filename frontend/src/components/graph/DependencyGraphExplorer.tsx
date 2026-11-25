@@ -141,7 +141,7 @@ const SymbolNode: React.FC<NodeProps<Node<SymbolNodeData>>> = ({ id, data }) => 
       onClick={() => {
         onSelect?.(id);
       }}
-      className="rounded-xl text-left font-sans select-none transition-shadow duration-150"
+      className="rounded-xl text-left font-sans select-none transition-shadow duration-150 animate-fade-in"
       style={{
         width: NODE_WIDTH,
         height: NODE_HEIGHT,

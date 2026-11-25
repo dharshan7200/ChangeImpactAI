@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
-  Activity, CheckCircle2, Clock, FolderGit2, GitPullRequest, PlayCircle, ShieldAlert, ShieldHalf, Table2, TrendingUp,
+  Activity, CheckCircle2, Clock, FolderGit2, GitPullRequest, Gauge, PlayCircle, ShieldAlert, ShieldHalf, Table2, TrendingUp, XCircle,
 } from 'lucide-react';
 import { dashboardApi } from '../api/phase5';
 import type { TeamDashboard } from '../types/phase5';
-import { RiskBadge, shortSha } from '../components/analysis/risk';
+import { RISK_COLORS, RiskBadge, shortSha } from '../components/analysis/risk';
 import { ConclusionChip } from '../components/repository/PullRequestsPanel';
 import { SeverityBadge } from '../components/analysis/SecurityPanel';
+import { useCountUp } from '../hooks/useCountUp';
 
-const SERIES = '#3987e5'; // categorical slot 1 (dark surface)
+const SERIES = '#28d5ec'; // the single series: brand signal cyan (no other series shares the chart)
 
 export const DashboardPage: React.FC = () => {
   const [days, setDays] = useState(30);
@@ -21,13 +22,14 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Team dashboard</h1>
-          <p className="text-xs text-slate-400 mt-1">Change risk, pull requests, quality and security across your repositories.</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-cyan-300/80">Overview</p>
+          <h1 className="mt-1 text-[28px] font-semibold text-white">Team dashboard</h1>
+          <p className="text-sm text-slate-400 mt-1">Change risk, pull requests, quality and security across your repositories.</p>
         </div>
-        <div className="flex gap-1 text-xs" role="group" aria-label="Time window">
+        <div className="flex rounded-xl border border-slate-800 bg-slate-900/70 p-1 text-xs" role="group" aria-label="Time window">
           {[7, 30, 90].map((d) => (
-            <button key={d} type="button" onClick={() => setDays(d)}
-                    className={`px-3 py-1.5 rounded-lg border cursor-pointer ${days === d ? 'bg-slate-800 border-slate-600 text-white' : 'border-slate-800 text-slate-400 hover:text-slate-200'}`}>
+            <button key={d} type="button" onClick={() => setDays(d)} aria-pressed={days === d}
+                    className={`min-h-[36px] rounded-lg px-3.5 font-medium transition-colors duration-150 ${days === d ? 'bg-slate-800 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]' : 'text-slate-400 hover:text-slate-100'}`}>
               {d} days
             </button>
           ))}
@@ -35,24 +37,34 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {isLoading || !data ? (
-        <div className="py-20 text-center text-slate-500 text-sm">Loading dashboard…</div>
+        <div className="space-y-6" aria-busy="true" aria-label="Loading dashboard">
+          <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
+            <div className="skeleton h-[236px] rounded-2xl" />
+            <div className="grid grid-cols-2 gap-4">{[0, 1, 2, 3].map((i) => <div key={i} className="skeleton h-[110px] rounded-2xl" />)}</div>
+          </div>
+          <div className="skeleton h-72" />
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4"><div className="skeleton h-56" /><div className="skeleton h-56" /></div>
+        </div>
       ) : data.repositories.length === 0 ? (
         <EmptyState />
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-            <Kpi label="Open pull requests" value={data.totals.openPullRequests} hint={`${data.totals.openHighRiskPullRequests} at HIGH risk or above`}
-                 emphasis={data.totals.openHighRiskPullRequests > 0} />
-            <Kpi label="High-risk changes" value={data.totals.highRiskChanges} hint={`of ${data.totals.distinctChanges} distinct changes (${data.totals.analyses} runs) in ${days} days`} />
-            <Kpi label="Failed analyses" value={data.totals.failedAnalyses} hint="could not be computed" />
-            <Kpi label="High/critical security" value={data.totals.securityFindingsHighOrCritical} hint="findings in analysed changes"
-                 emphasis={data.totals.securityFindingsHighOrCritical > 0} />
-            <Kpi label="Repositories indexed" value={`${data.totals.indexedRepositories}/${data.totals.repositories}`} hint="current dependency graph" />
+          <div className="stagger grid gap-4 lg:grid-cols-[1.3fr_1fr]">
+            <HeroRisk data={data} days={days} />
+            <div className="stagger grid grid-cols-2 gap-4">
+              <Kpi icon={GitPullRequest} label="Open pull requests" value={data.totals.openPullRequests}
+                   hint={`${data.totals.openHighRiskPullRequests} at HIGH risk or above`} emphasis={data.totals.openHighRiskPullRequests > 0} />
+              <Kpi icon={ShieldAlert} label="High-risk changes" value={data.totals.highRiskChanges}
+                   hint={`of ${data.totals.distinctChanges} distinct changes (${data.totals.analyses} runs)`} />
+              <Kpi icon={ShieldHalf} label="High/critical security" value={data.totals.securityFindingsHighOrCritical}
+                   hint="findings in analysed changes" emphasis={data.totals.securityFindingsHighOrCritical > 0} />
+              <Kpi icon={XCircle} label="Failed analyses" value={data.totals.failedAnalyses} hint="could not be computed" />
+            </div>
           </div>
 
-          <RiskTrend data={data} />
+          <div className="animate-fade-up" style={{ animationDelay: '200ms' }}><RiskTrend data={data} /></div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <div className="stagger grid grid-cols-1 xl:grid-cols-2 gap-4">
             <Panel title="Open pull requests" icon={<GitPullRequest className="w-4 h-4 text-violet-400" />} subtitle="Riskiest first; from GitHub App webhooks">
               {data.openPullRequests.length === 0 ? <Muted>No open pull requests reported by the GitHub App.</Muted> : (
                 <table className="w-full text-xs">
@@ -96,12 +108,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           <Panel title="Security findings" icon={<ShieldHalf className="w-4 h-4 text-rose-400" />} subtitle={`In changes analysed in the last ${days} days`}>
-            <div className="flex flex-wrap gap-3 mb-3">
-              {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'INFO'].filter((s) => data.security.bySeverity[s]).map((s) => (
-                <span key={s} className="inline-flex items-center gap-1.5 text-xs"><SeverityBadge severity={s} /><span className="font-mono text-slate-300">{data.security.bySeverity[s]}</span></span>
-              ))}
-              {Object.keys(data.security.bySeverity).length === 0 && <Muted>No security findings.</Muted>}
-            </div>
+            {Object.keys(data.security.bySeverity).length === 0 ? <Muted>No security findings.</Muted> : <SeverityBar counts={data.security.bySeverity} />}
             {data.security.top.length > 0 && (
               <ul className="divide-y divide-slate-800/70">
                 {data.security.top.map((f, i) => (
@@ -167,7 +174,7 @@ export const DashboardPage: React.FC = () => {
                     <td className="py-1.5 pr-3 text-slate-500 whitespace-nowrap">{new Date(j.createdAt).toLocaleString()}</td>
                     <td className="py-1.5 pr-3 text-slate-300">{j.type === 'CHANGE_ANALYSIS' ? 'change analysis' : j.type.toLowerCase().replace(/_/g, ' ')}</td>
                     <td className="py-1.5 pr-3 text-slate-400">{j.repository}</td>
-                    <td className={`py-1.5 pr-3 font-semibold ${j.status === 'FAILED' ? 'text-rose-300' : j.status === 'COMPLETED' ? 'text-emerald-300' : 'text-amber-300'}`}>{j.status}</td>
+                    <td className="py-1.5 pr-3"><JobStatus status={j.status} /></td>
                     <td className="py-1.5 text-right font-mono text-slate-500">{j.durationMs != null ? `${(j.durationMs / 1000).toFixed(1)} s` : ''}</td>
                   </tr>
                 ))}
@@ -190,9 +197,9 @@ const RiskTrend: React.FC<{ data: TeamDashboard }> = ({ data }) => {
   const any = points.some((p) => p.maxScore != null);
   return (
     <Panel
-      title="Risk trend — highest change risk per day"
+      title="Risk trend"
       icon={<TrendingUp className="w-4 h-4 text-cyan-400" />}
-      subtitle="Heuristic score 0–100 of the riskiest analysed change each day; gaps are days without analyses"
+      subtitle="Highest change risk per day (heuristic 0–100); gaps are days without analyses"
       action={
         <button type="button" onClick={() => setTable(!table)} className="text-[11px] text-slate-400 hover:text-slate-200 inline-flex items-center gap-1 cursor-pointer">
           <Table2 className="w-3.5 h-3.5" /> {table ? 'Chart' : 'Table'}
@@ -212,23 +219,32 @@ const RiskTrend: React.FC<{ data: TeamDashboard }> = ({ data }) => {
           </table>
         </div>
       ) : (
-        <div className="h-56">
+        <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={points} margin={{ top: 8, right: 64, bottom: 0, left: -16 }}>
-              <CartesianGrid stroke="#334155" strokeOpacity={0.35} vertical={false} />
-              <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 10 }} tickLine={false} axisLine={{ stroke: '#334155' }} interval="preserveStartEnd" minTickGap={24} />
-              <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tick={{ fill: '#94a3b8', fontSize: 10 }} tickLine={false} axisLine={false} />
+            <AreaChart data={points} margin={{ top: 8, right: 70, bottom: 0, left: -16 }}>
+              <defs>
+                <linearGradient id="riskFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={SERIES} stopOpacity={0.28} />
+                  <stop offset="100%" stopColor={SERIES} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              {/* risk bands: faint status tints, always named on the right */}
+              <ReferenceArea y1={50} y2={75} fill={RISK_COLORS.HIGH} fillOpacity={0.045} ifOverflow="hidden" />
+              <ReferenceArea y1={75} y2={100} fill={RISK_COLORS.CRITICAL} fillOpacity={0.06} ifOverflow="hidden" />
+              <CartesianGrid stroke="#252d3a" vertical={false} />
+              <XAxis dataKey="label" tick={{ fill: '#94a2b6', fontSize: 10 }} tickLine={false} axisLine={{ stroke: '#252d3a' }} interval="preserveStartEnd" minTickGap={24} />
+              <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tick={{ fill: '#94a2b6', fontSize: 10 }} tickLine={false} axisLine={false} />
               {[{ y: 25, l: 'MEDIUM' }, { y: 50, l: 'HIGH' }, { y: 75, l: 'CRITICAL' }].map((t) => (
-                <ReferenceLine key={t.y} y={t.y} stroke="#64748b" strokeDasharray="3 4" strokeOpacity={0.6}
-                               label={{ value: t.l, position: 'right', fill: '#94a3b8', fontSize: 10 }} />
+                <ReferenceLine key={t.y} y={t.y} stroke="#3a4454" strokeDasharray="3 4"
+                               label={{ value: t.l, position: 'right', fill: '#94a2b6', fontSize: 10 }} />
               ))}
               <Tooltip
-                cursor={{ stroke: '#64748b', strokeWidth: 1 }}
+                cursor={{ stroke: '#525f73', strokeWidth: 1 }}
                 content={({ active, payload }) => {
                   const p = active && payload?.length ? (payload[0].payload as (typeof points)[number]) : null;
                   if (!p || p.analyses === 0) return null;
                   return (
-                    <div className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-[11px] text-slate-300 shadow-xl">
+                    <div className="rounded-xl border border-slate-700 bg-slate-950/95 px-3 py-2 text-[11px] text-slate-300 shadow-xl backdrop-blur">
                       <div className="font-semibold text-slate-100">{p.date}</div>
                       <div>Highest risk <span className="font-mono text-white">{p.maxScore}</span> · average <span className="font-mono">{p.avgScore}</span></div>
                       <div>{p.analyses} analysis(es), {p.high} HIGH or above</div>
@@ -236,9 +252,9 @@ const RiskTrend: React.FC<{ data: TeamDashboard }> = ({ data }) => {
                   );
                 }}
               />
-              <Line type="monotone" dataKey="maxScore" stroke={SERIES} strokeWidth={2} connectNulls={false} isAnimationActive={false}
-                    dot={{ r: 4, fill: SERIES, stroke: '#0f172a', strokeWidth: 2 }} activeDot={{ r: 6, stroke: '#0f172a', strokeWidth: 2 }} />
-            </LineChart>
+              <Area type="monotone" dataKey="maxScore" stroke={SERIES} strokeWidth={2} fill="url(#riskFill)" connectNulls={false} isAnimationActive={false}
+                    dot={{ r: 4, fill: SERIES, stroke: '#141a24', strokeWidth: 2 }} activeDot={{ r: 6, stroke: '#141a24', strokeWidth: 2 }} />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       )}
@@ -246,25 +262,143 @@ const RiskTrend: React.FC<{ data: TeamDashboard }> = ({ data }) => {
   );
 };
 
-const Kpi: React.FC<{ label: string; value: React.ReactNode; hint?: string; emphasis?: boolean }> = ({ label, value, hint, emphasis }) => (
-  <div className={`bg-slate-900 border rounded-xl p-4 ${emphasis ? 'border-orange-500/40' : 'border-slate-800'}`}>
-    <div className="text-[11px] uppercase tracking-wider text-slate-400">{label}</div>
-    <div className="text-2xl font-bold text-white mt-1">{value}</div>
-    {hint && <div className="text-[10px] text-slate-500 mt-0.5">{hint}</div>}
+const CountUp: React.FC<{ value: number }> = ({ value }) => <>{useCountUp(value)}</>;
+
+/** Numbers count up briefly; "11/13"-style values count each part. */
+function animated(value: React.ReactNode): React.ReactNode {
+  if (typeof value === 'number') return <CountUp value={value} />;
+  if (typeof value === 'string' && /^\d+\/\d+$/.test(value)) {
+    const [a, b] = value.split('/').map(Number);
+    return <><CountUp value={a} />/<CountUp value={b} /></>;
+  }
+  return value;
+}
+
+const Kpi: React.FC<{ icon: React.ElementType; label: string; value: React.ReactNode; hint?: string; emphasis?: boolean }> = ({
+  icon: Icon, label, value, hint, emphasis,
+}) => (
+  <div className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-b from-slate-900 to-slate-900/50 p-4 shadow-panel transition-colors duration-200 hover:border-slate-700 ${
+    emphasis ? 'border-orange-500/40' : 'border-slate-800/80'}`}>
+    <div className="flex items-center justify-between">
+      <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">{label}</span>
+      <span className={`flex h-7 w-7 items-center justify-center rounded-lg border ${emphasis ? 'border-orange-500/30 bg-orange-500/10 text-orange-300' : 'border-slate-800 bg-slate-950/60 text-slate-400 group-hover:text-cyan-300'}`}>
+        <Icon className="h-3.5 w-3.5" aria-hidden />
+      </span>
+    </div>
+    <div className="font-display mt-2 text-[30px] font-semibold leading-none text-white tabular-nums">{animated(value)}</div>
+    {hint && <div className="mt-2 text-[11px] text-slate-500">{hint}</div>}
   </div>
 );
+
+/** The headline: the riskiest change of the window, with its level, a sparkline of daily peaks and index coverage. */
+const HeroRisk: React.FC<{ data: TeamDashboard; days: number }> = ({ data, days }) => {
+  const days_ = data.riskTrend.filter((p) => p.maxScore != null);
+  const peak = days_.reduce<(typeof days_)[number] | null>((m, p) => (m == null || (p.maxScore ?? 0) > (m.maxScore ?? 0) ? p : m), null);
+  const score = peak?.maxScore ?? null;
+  const level = score == null ? null : score >= 75 ? 'CRITICAL' : score >= 50 ? 'HIGH' : score >= 25 ? 'MEDIUM' : 'LOW';
+  const indexed = data.totals.indexedRepositories, total = data.totals.repositories;
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/30 p-6 shadow-panel">
+      <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" aria-hidden />
+      <div className="relative flex items-start justify-between gap-4">
+        <div>
+          <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-400">
+            <Gauge className="h-3.5 w-3.5 text-cyan-300" aria-hidden /> Peak change risk · last {days} days
+          </p>
+          <div className="mt-3 flex items-end gap-3">
+            <span className="font-display text-6xl font-semibold leading-none text-white tabular-nums">{score == null ? '—' : <CountUp value={score} />}</span>
+            {score != null && <span className="mb-1.5 text-sm text-slate-500">/ 100</span>}
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+            {level && <RiskBadge level={level} score={score} />}
+            {peak && <span>on {peak.date} · {data.totals.analyses} analyses in the window</span>}
+          </div>
+        </div>
+        <CoverageRing value={indexed} total={total} />
+      </div>
+      <div className="relative mt-5 h-16" aria-hidden>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data.riskTrend} margin={{ top: 4, right: 4, bottom: 0, left: 4 }}>
+            <defs>
+              <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={SERIES} stopOpacity={0.35} />
+                <stop offset="100%" stopColor={SERIES} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <YAxis hide domain={[0, 100]} />
+            <Area type="monotone" dataKey="maxScore" stroke={SERIES} strokeWidth={2} fill="url(#heroFill)" connectNulls isAnimationActive={false} dot={false} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      <p className="relative mt-1 text-[11px] text-slate-500">Daily peak of the heuristic risk score (0–100), not a probability.</p>
+    </div>
+  );
+};
+
+/** Part of a whole as a ring: indexed repositories of all connected ones. */
+const CoverageRing: React.FC<{ value: number; total: number }> = ({ value, total }) => {
+  const r = 26, c = 2 * Math.PI * r, k = total ? value / total : 0;
+  return (
+    <div className="flex shrink-0 flex-col items-center" role="img" aria-label={`${value} of ${total} repositories indexed`}>
+      <svg width="68" height="68" viewBox="0 0 68 68" aria-hidden>
+        <circle cx="34" cy="34" r={r} fill="none" stroke="#252d3a" strokeWidth="6" />
+        <circle cx="34" cy="34" r={r} fill="none" stroke={SERIES} strokeWidth="6" strokeLinecap="round"
+                strokeDasharray={`${c * k} ${c}`} transform="rotate(-90 34 34)" className="transition-[stroke-dasharray] duration-700" />
+        <text x="34" y="38" textAnchor="middle" className="fill-white font-display" fontSize="13" fontWeight="600">{value}/{total}</text>
+      </svg>
+      <span className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">indexed</span>
+    </div>
+  );
+};
+
+const SEVERITY_ORDER = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'INFO'] as const;
+const SEVERITY_COLOR: Record<string, string> = { ...RISK_COLORS, INFO: '#76859b' };
+
+/** Part-to-whole of findings by severity: one bar, 2 px surface gaps, every segment named with its count below. */
+const SeverityBar: React.FC<{ counts: Record<string, number> }> = ({ counts }) => {
+  const rows = SEVERITY_ORDER.filter((k) => counts[k]).map((k) => ({ k, n: counts[k] }));
+  const total = rows.reduce((t, r) => t + r.n, 0);
+  return (
+    <div className="mb-4">
+      <div className="flex h-2.5 w-full gap-[2px] overflow-hidden rounded-full" role="img"
+           aria-label={rows.map((r) => `${r.n} ${r.k}`).join(', ')}>
+        {rows.map((r) => (
+          <div key={r.k} title={`${r.n} ${r.k}`} className="h-full first:rounded-l-full last:rounded-r-full"
+               style={{ width: `${(r.n / total) * 100}%`, background: SEVERITY_COLOR[r.k] }} />
+        ))}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+        {rows.map((r) => (
+          <span key={r.k} className="inline-flex items-center gap-2 text-xs">
+            <SeverityBadge severity={r.k} />
+            <span className="font-mono text-slate-200">{r.n}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const JobStatus: React.FC<{ status: string }> = ({ status }) => {
+  const c = status === 'FAILED' ? 'bg-rose-400' : status === 'COMPLETED' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse';
+  const t = status === 'FAILED' ? 'text-rose-300' : status === 'COMPLETED' ? 'text-emerald-300' : 'text-amber-300';
+  return <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${t}`}><span className={`h-1.5 w-1.5 rounded-full ${c}`} aria-hidden />{status}</span>;
+};
 
 const Panel: React.FC<{ title: string; subtitle?: string; icon?: React.ReactNode; action?: React.ReactNode; children: React.ReactNode }> = ({
   title, subtitle, icon, action, children,
 }) => (
-  <div className="min-w-0 bg-slate-900 border border-slate-800 rounded-2xl p-5">
+  <section className="min-w-0 rounded-2xl border border-slate-800/80 bg-gradient-to-b from-slate-900 to-slate-900/60 p-5 shadow-panel">
     <div className="flex items-start justify-between gap-3">
-      <h3 className="text-sm font-bold text-white flex items-center gap-2">{icon}{title}</h3>
+      <h3 className="flex items-center gap-2.5 text-[15px] font-semibold text-white">
+        {icon && <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-800 bg-slate-950/60">{icon}</span>}
+        {title}
+      </h3>
       {action}
     </div>
-    {subtitle && <p className="text-[11px] text-slate-500 mt-0.5 mb-3">{subtitle}</p>}
+    {subtitle && <p className="mt-1 mb-4 text-xs text-slate-500">{subtitle}</p>}
     {children}
-  </div>
+  </section>
 );
 
 const Muted: React.FC<{ children: React.ReactNode }> = ({ children }) => <p className="text-xs text-slate-500">{children}</p>;

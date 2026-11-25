@@ -10,6 +10,8 @@
 *.pem
 *.p12
 *.pfx
+start-local.bat
+start-local.ps1
 
 # Backend (Java / Maven)
 target/

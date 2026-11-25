@@ -1,14 +1,14 @@
 import React from 'react';
 import { AlertCircle, GitCompareArrows, Radar, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { Logo } from './Logo';
+import { ImpactAnimation } from './ImpactAnimation';
+import { LANGUAGE_MARKS, LanguageStrip } from './LanguageIcons';
 
 const POINTS: { icon: LucideIcon; title: string; text: string }[] = [
   { icon: GitCompareArrows, title: 'Semantic diff', text: 'Signature, behaviour and API changes, not just changed lines.' },
   { icon: Radar, title: 'Impact & risk', text: 'Every caller, dependent and table a change reaches, with an explained risk score.' },
   { icon: ShieldCheck, title: 'Tests & security', text: 'The tests to run first and the security findings in the change.' },
 ];
-
-const LANGUAGES = ['Java', 'Python', 'TypeScript', 'React', 'PHP', 'C#', 'Go', 'Ruby', 'SQL'];
 
 /** Split-screen frame for sign-in and registration: product story on the left, the form on the right. */
 export const AuthShell: React.FC<{ title: string; subtitle: string; children: React.ReactNode; footer: React.ReactNode }> = ({
@@ -17,16 +17,18 @@ export const AuthShell: React.FC<{ title: string; subtitle: string; children: Re
   <div className="min-h-screen grid lg:grid-cols-[1.05fr_1fr]">
     {/* Brand panel */}
     <aside className="relative hidden lg:flex flex-col justify-between overflow-hidden border-r border-slate-800/80 bg-slate-900/40 p-12">
-      <Ripples />
       <Logo size={36} />
       <div className="relative max-w-md animate-fade-up">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-300/90">Change impact intelligence</p>
         <h2 className="mt-4 text-4xl font-semibold leading-[1.15] text-white">
           See what a change will break <span className="text-cyan-300">before</span> it ships.
         </h2>
-        <ul className="mt-10 space-y-6">
-          {POINTS.map(({ icon: Icon, title: t, text }) => (
-            <li key={t} className="flex gap-4">
+        <div className="mt-8 rounded-xl border border-slate-800 bg-slate-950/70 p-4 shadow-panel animate-fade-up" style={{ animationDelay: '120ms' }}>
+          <ImpactAnimation />
+        </div>
+        <ul className="mt-8 space-y-4">
+          {POINTS.map(({ icon: Icon, title: t, text }, i) => (
+            <li key={t} className="flex gap-4 animate-fade-up" style={{ animationDelay: `${240 + i * 90}ms` }}>
               <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900">
                 <Icon className="h-[18px] w-[18px] text-cyan-300" aria-hidden />
               </span>
@@ -39,12 +41,8 @@ export const AuthShell: React.FC<{ title: string; subtitle: string; children: Re
         </ul>
       </div>
       <div className="relative">
-        <p className="text-xs text-slate-500 mb-2">Analyses</p>
-        <div className="flex flex-wrap gap-1.5">
-          {LANGUAGES.map((l) => (
-            <span key={l} className="rounded-md border border-slate-700/70 bg-slate-900/70 px-2 py-0.5 font-mono text-[11px] text-slate-300">{l}</span>
-          ))}
-        </div>
+        <p className="mb-2.5 text-xs text-slate-500">Analyses {LANGUAGE_MARKS.length} languages</p>
+        <div className="max-w-[260px]"><LanguageStrip /></div>
       </div>
     </aside>
 
@@ -58,19 +56,6 @@ export const AuthShell: React.FC<{ title: string; subtitle: string; children: Re
         <div className="mt-8 border-t border-slate-800 pt-6 text-sm text-slate-400">{footer}</div>
       </div>
     </main>
-  </div>
-);
-
-/** Concentric impact ripples behind the brand panel (decorative). */
-const Ripples: React.FC = () => (
-  <div className="pointer-events-none absolute -bottom-56 -right-56" aria-hidden>
-    <div className="relative h-[560px] w-[560px]">
-      {[0, 1, 2].map((i) => (
-        <span key={i} className="absolute inset-0 rounded-full border border-cyan-400/25 animate-ripple" style={{ animationDelay: `${i * 1.05}s` }} />
-      ))}
-      <span className="absolute inset-[38%] rounded-full border border-cyan-400/15" />
-      <span className="absolute inset-[24%] rounded-full border border-cyan-400/10" />
-    </div>
   </div>
 );
 

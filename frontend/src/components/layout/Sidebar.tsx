@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { LANGUAGE_MARKS, LanguageStrip } from '../brand/LanguageIcons';
 import { FolderGit2, Github, LayoutDashboard, Play, Plug, ScanSearch, type LucideIcon } from 'lucide-react';
 
 export const NAV_ITEMS: { to: string; label: string; icon: LucideIcon; hint: string }[] = [
@@ -14,7 +15,6 @@ const STEPS: { icon: LucideIcon; text: string }[] = [
   { icon: ScanSearch, text: 'Analyse a change or pull request' },
 ];
 
-const LANGUAGES = ['Java', 'Python', 'JS/TS', 'React', 'PHP', 'C#', 'Go', 'Ruby', 'HTML', 'CSS', 'SQL'];
 
 /** Horizontal navigation shown instead of the sidebar on narrow screens. */
 export const MobileNav: React.FC = () => (
@@ -77,12 +77,10 @@ export const Sidebar: React.FC = () => (
 
     <div className="space-y-3 px-3">
       <div>
-        <p className="pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Languages</p>
-        <div className="flex flex-wrap gap-1">
-          {LANGUAGES.map((l) => (
-            <span key={l} className="rounded border border-slate-800 bg-slate-900/60 px-1.5 py-0.5 font-mono text-[10px] text-slate-400">{l}</span>
-          ))}
-        </div>
+        <p className="flex items-baseline justify-between pb-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+          Languages <span className="font-mono normal-case tracking-normal text-slate-600">{LANGUAGE_MARKS.length} analysed</span>
+        </p>
+        <LanguageStrip />
       </div>
       <p className="border-t border-slate-800/80 pt-3 font-mono text-[11px] text-slate-500">ChangeImpact AI · v0.1.0</p>
     </div>

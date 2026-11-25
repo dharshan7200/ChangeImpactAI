@@ -55,10 +55,21 @@ export default {
       keyframes: {
         'fade-up': { from: { opacity: '0', transform: 'translateY(6px)' }, to: { opacity: '1', transform: 'none' } },
         ripple: { '0%': { opacity: '0.55', transform: 'scale(0.6)' }, '100%': { opacity: '0', transform: 'scale(1.6)' } },
+        'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
+        shimmer: { '100%': { transform: 'translateX(100%)' } },
+        // impact diagram (6 s loop): an edge draws, a node lights, the change rings
+        'edge-draw': { '0%': { strokeDashoffset: '1', opacity: '1' }, '12%': { strokeDashoffset: '0', opacity: '1' }, '52%': { strokeDashoffset: '0', opacity: '1' }, '62%, 100%': { strokeDashoffset: '0', opacity: '0' } },
+        'node-hit': { '0%': { opacity: '0' }, '6%': { opacity: '1' }, '52%': { opacity: '1' }, '62%, 100%': { opacity: '0' } },
+        'change-ring': { '0%': { opacity: '0.8', transform: 'scale(0.6)' }, '22%': { opacity: '0', transform: 'scale(2.6)' }, '100%': { opacity: '0', transform: 'scale(2.6)' } },
       },
       animation: {
         'fade-up': 'fade-up 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both',
         ripple: 'ripple 3.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite',
+        'fade-in': 'fade-in 320ms ease-out both',
+        shimmer: 'shimmer 1.6s ease-in-out infinite',
+        'edge-draw': 'edge-draw 6s cubic-bezier(0.4, 0, 0.2, 1) infinite both',
+        'node-hit': 'node-hit 6s ease-out infinite both',
+        'change-ring': 'change-ring 6s ease-out infinite both',
       },
     },
   },
