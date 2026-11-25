@@ -4,7 +4,7 @@ services:
   # ----------------------------------------------------
   - type: web
     name: changeimpact-backend
-    env: docker
+    runtime: docker
     plan: free
     dockerfilePath: backend/Dockerfile
     dockerContext: .
@@ -32,8 +32,7 @@ services:
   # ----------------------------------------------------
   - type: web
     name: changeimpact-frontend
-    env: static
-    plan: free
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
