@@ -18,6 +18,10 @@ services:
         value: "false"
       - key: SPRING_RABBITMQ_LISTENER_SIMPLE_AUTO_STARTUP
         value: "false"
+      - key: MANAGEMENT_HEALTH_RABBIT_ENABLED
+        value: "false"
+      - key: MANAGEMENT_HEALTH_REDIS_ENABLED
+        value: "false"
       - key: GEMINI_API_KEY
         sync: false
       - key: SPRING_DATASOURCE_URL

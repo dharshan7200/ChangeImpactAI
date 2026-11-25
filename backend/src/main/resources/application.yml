@@ -153,6 +153,11 @@ management:
     health:
       show-details: when-authorized
       show-components: when-authorized
+  health:
+    rabbit:
+      enabled: ${MANAGEMENT_HEALTH_RABBIT_ENABLED:false}
+    redis:
+      enabled: ${MANAGEMENT_HEALTH_REDIS_ENABLED:false}
   metrics:
     tags:
       application: changeimpact-ai

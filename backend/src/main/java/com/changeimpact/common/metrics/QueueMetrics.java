@@ -34,6 +34,9 @@ public class QueueMetrics implements MeterBinder {
     private final AppProperties appProperties;
     private final JdbcTemplate jdbc;
 
+    @org.springframework.beans.factory.annotation.Value("${spring.rabbitmq.listener.simple.auto-startup:true}")
+    private boolean rabbitAutoStartup;
+
     private final Map<String, AtomicLong> messages = new ConcurrentHashMap<>();
     private final Map<String, AtomicLong> consumers = new ConcurrentHashMap<>();
     private final Map<String, AtomicLong> activeJobs = new ConcurrentHashMap<>();
@@ -69,15 +72,17 @@ public class QueueMetrics implements MeterBinder {
 
     @Scheduled(fixedDelay = 15_000, initialDelay = 5_000)
     public void refresh() {
-        for (String queue : queues()) {
-            try {
-                QueueInformation info = amqpAdmin.getQueueInfo(queue);
-                messages.get(queue).set(info == null ? -1 : info.getMessageCount());
-                consumers.get(queue).set(info == null ? -1 : info.getConsumerCount());
-            } catch (RuntimeException e) {
-                messages.get(queue).set(-1);
-                consumers.get(queue).set(-1);
-                log.debug("Queue metrics for {} unavailable: {}", queue, e.getMessage());
+        if (rabbitAutoStartup) {
+            for (String queue : queues()) {
+                try {
+                    QueueInformation info = amqpAdmin.getQueueInfo(queue);
+                    messages.get(queue).set(info == null ? -1 : info.getMessageCount());
+                    consumers.get(queue).set(info == null ? -1 : info.getConsumerCount());
+                } catch (RuntimeException e) {
+                    messages.get(queue).set(-1);
+                    consumers.get(queue).set(-1);
+                    log.debug("Queue metrics for {} unavailable: {}", queue, e.getMessage());
+                }
             }
         }
         try {
