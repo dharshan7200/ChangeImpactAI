@@ -1,0 +1,130 @@
+{
+ "repository": "spring-projects/spring-petclinic @ 500158f",
+ "note": "Identifier-style lookups (what AI review sends: changed symbol names). Labels from the source before running.",
+ "queries": [
+  {
+   "q": "findByLastNameStartingWith",
+   "relevant": [
+    "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)"
+   ]
+  },
+  {
+   "q": "PetValidator",
+   "relevant": [
+    "owner.PetValidator",
+    "owner.PetValidator#validate(Object,Errors)",
+    "owner.PetValidator#supports(Class)"
+   ]
+  },
+  {
+   "q": "triggerException",
+   "relevant": [
+    "system.CrashController#triggerException()"
+   ]
+  },
+  {
+   "q": "isDuplicatePetNameViolation",
+   "relevant": [
+    "owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)"
+   ]
+  },
+  {
+   "q": "getNrOfSpecialties",
+   "relevant": [
+    "vet.Vet#getNrOfSpecialties()"
+   ]
+  },
+  {
+   "q": "localeChangeInterceptor",
+   "relevant": [
+    "system.WebConfiguration#localeChangeInterceptor()"
+   ]
+  },
+  {
+   "q": "findPetTypes",
+   "relevant": [
+    "owner.PetTypeRepository#findPetTypes()"
+   ]
+  },
+  {
+   "q": "addPaginationModel",
+   "relevant": [
+    "owner.OwnerController#addPaginationModel(int,Model,Page)",
+    "vet.VetController#addPaginationModel(int,Page,Model)"
+   ]
+  },
+  {
+   "q": "minVisitDate",
+   "relevant": [
+    "owner.VisitController#minVisitDate()"
+   ]
+  },
+  {
+   "q": "registerHints",
+   "relevant": [
+    "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)"
+   ]
+  },
+  {
+   "q": "PetTypeFormatter parse",
+   "relevant": [
+    "owner.PetTypeFormatter#parse(String,Locale)"
+   ]
+  },
+  {
+   "q": "setAllowedFields",
+   "relevant": [
+    "owner.OwnerController#setAllowedFields(WebDataBinder)",
+    "owner.VisitController#setAllowedFields(WebDataBinder)"
+   ]
+  },
+  {
+   "q": "loadPetWithVisit",
+   "relevant": [
+    "owner.VisitController#loadPetWithVisit(int,int,Map)"
+   ]
+  },
+  {
+   "q": "showResourcesVetList",
+   "relevant": [
+    "vet.VetController#showResourcesVetList()"
+   ]
+  },
+  {
+   "q": "updatePetDetails",
+   "relevant": [
+    "owner.PetController#updatePetDetails(Owner,Pet)"
+   ]
+  },
+  {
+   "q": "getSpecialtiesInternal",
+   "relevant": [
+    "vet.Vet#getSpecialtiesInternal()"
+   ]
+  },
+  {
+   "q": "Owner.addVisit",
+   "relevant": [
+    "owner.Owner#addVisit(Integer,Visit)"
+   ]
+  },
+  {
+   "q": "initNewVisitForm",
+   "relevant": [
+    "owner.VisitController#initNewVisitForm()"
+   ]
+  },
+  {
+   "q": "findPaginatedForOwnersLastName",
+   "relevant": [
+    "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"
+   ]
+  },
+  {
+   "q": "BaseEntity isNew",
+   "relevant": [
+    "model.BaseEntity#isNew()"
+   ]
+  }
+ ]
+}

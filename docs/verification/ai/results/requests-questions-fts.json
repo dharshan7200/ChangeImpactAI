@@ -1,0 +1,240 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "queries": 25,
+ "summary": {
+  "fts": {
+   "hit@1": 0.12,
+   "hit@5": 0.48,
+   "mrr@10": 0.258,
+   "medianMs": 22
+  }
+ },
+ "fallbacks": [],
+ "perQuery": [
+  {
+   "q": "strip the Authorization header when redirected to a different host",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_should_strip_auth_host_change",
+    "tests.test_lowlevel#test_chunked_upload_doesnt_skip_host_header",
+    "tests.test_lowlevel#test_chunked_upload_uses_only_specified_host_header"
+   ]
+  },
+  {
+   "q": "raise an exception for 4xx or 5xx responses",
+   "fts": 4,
+   "ftsTop3": [
+    "tests.test_utils#test_set_environ_raises_exception",
+    "exceptions.RequestException#__init__",
+    "exceptions.RequestException"
+   ]
+  },
+  {
+   "q": "decide whether a URL should bypass the proxy",
+   "fts": 10,
+   "ftsTop3": [
+    "exceptions.InvalidProxyURL",
+    "tests.test_utils#test_should_bypass_proxies_no_proxy_domain_boundary",
+    "tests.test_utils#test_should_bypass_proxies_no_proxy"
+   ]
+  },
+  {
+   "q": "read credentials from the netrc file",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_utils.TestSuperLen#test_super_len_correctly_calculates_len_of_partially_read_file",
+    "_types.SupportsRead#read",
+    "tests.test_utils.TestGetNetrcAuth#test_empty_default_credentials_ignored"
+   ]
+  },
+  {
+   "q": "compute the digest authentication header",
+   "fts": 2,
+   "ftsTop3": [
+    "exceptions.InvalidHeader",
+    "auth.HTTPDigestAuth#build_digest_header",
+    "cookies.MockRequest#add_unredirected_header"
+   ]
+  },
+  {
+   "q": "retry the request after a 401 challenge with digest auth",
+   "fts": 3,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_DIGEST_AUTH_SETS_SESSION_COOKIES",
+    "tests.test_requests.TestRequests#test_DIGEST_AUTH_RETURNS_COOKIE",
+    "auth.HTTPDigestAuth#handle_401"
+   ]
+  },
+  {
+   "q": "encode a username and password for basic auth",
+   "fts": 6,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_basic_auth_str_is_always_native",
+    "auth.HTTPDigestAuth#__init__",
+    "auth.HTTPDigestAuth#__init__"
+   ]
+  },
+  {
+   "q": "follow redirects up to a maximum number",
+   "fts": 5,
+   "ftsTop3": [
+    "exceptions.TooManyRedirects",
+    "tests.test_requests.TestRequests#test_HTTP_302_TOO_MANY_REDIRECTS_WITH_PARAMS",
+    "tests.test_requests.TestRequests#test_respect_proxy_env_on_send_with_redirects"
+   ]
+  },
+  {
+   "q": "change POST to GET after a 303 redirect",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_http_303_changes_post_to_get",
+    "tests.test_requests.TestRequests#test_http_303_doesnt_change_head_to_get",
+    "tests.test_requests.TestRequests#test_HTTP_307_ALLOW_REDIRECT_POST"
+   ]
+  },
+  {
+   "q": "merge session settings with per-request settings",
+   "fts": 1,
+   "ftsTop3": [
+    "sessions.Session#merge_environment_settings",
+    "tests.test_requests.TestRequests#test_respect_proxy_env_on_send_session_prepared_request",
+    "tests.test_requests.TestRequests#test_request_cookie_overrides_session_cookie"
+   ]
+  },
+  {
+   "q": "iterate over the response body in chunks",
+   "fts": 8,
+   "ftsTop3": [
+    "models.Response#__enter__",
+    "cookies.MockResponse#info",
+    "models.Response#__exit__"
+   ]
+  },
+  {
+   "q": "decode the response body as JSON",
+   "fts": 8,
+   "ftsTop3": [
+    "tests.test_requests#test_json_decode_errors_are_serializable_deserializable",
+    "tests.test_requests.TestPreparingURLs#test_json_decode_persists_doc_attr",
+    "tests.test_requests.TestPreparingURLs#test_json_decode_compatibility"
+   ]
+  },
+  {
+   "q": "guess the text encoding of the response",
+   "fts": 3,
+   "ftsTop3": [
+    "tests.test_utils.TestGuessJSONUTF#test_bad_utf_like_encoding",
+    "tests.testserver.server.Server#text_response_server",
+    "models.Response#apparent_encoding"
+   ]
+  },
+  {
+   "q": "encode multipart file uploads",
+   "fts": null,
+   "ftsTop3": [
+    "models.RequestEncodingMixin#_encode_params",
+    "models.RequestEncodingMixin#_encode_params",
+    "models.RequestEncodingMixin#_encode_params"
+   ]
+  },
+  {
+   "q": "validate and normalise the request URL",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_prepare_request_with_bytestring_url",
+    "tests.test_adapters#test_request_url_handles_leading_path_separators",
+    "models.RequestEncodingMixin#path_url"
+   ]
+  },
+  {
+   "q": "set the Content-Length header",
+   "fts": 8,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_chunked_upload_does_not_set_content_length_header",
+    "tests.test_requests.TestRequests#test_empty_stream_with_auth_does_not_set_content_length_header",
+    "tests.test_requests.TestRequests#test_no_content_length"
+   ]
+  },
+  {
+   "q": "mount a transport adapter for a URL prefix",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_session_get_adapter_prefix_matching_mixed_case",
+    "tests.test_requests.TestRequests#test_session_get_adapter_prefix_without_trailing_slash",
+    "tests.test_requests.TestRequests#test_session_get_adapter_prefix_with_trailing_slash"
+   ]
+  },
+  {
+   "q": "verify TLS certificates",
+   "fts": 5,
+   "ftsTop3": [
+    "tests.test_requests.TestPreparingURLs#test_different_connection_pool_for_tls_settings_verify_True",
+    "tests.test_requests.TestPreparingURLs#test_different_connection_pool_for_tls_settings_verify_bundle_unexpired_cert",
+    "tests.test_requests.TestPreparingURLs#test_different_connection_pool_for_tls_settings_verify_bundle_expired_cert"
+   ]
+  },
+  {
+   "q": "convert a cookie jar to a dictionary",
+   "fts": null,
+   "ftsTop3": [
+    "cookies.RequestsCookieJar#get_policy",
+    "cookies.RequestsCookieJar#__contains__",
+    "cookies.RequestsCookieJar#__iter__"
+   ]
+  },
+  {
+   "q": "parse Link headers",
+   "fts": 4,
+   "ftsTop3": [
+    "cookies.MockRequest#get_new_headers",
+    "utils#default_headers",
+    "tests.test_utils#test_parse_dict_header"
+   ]
+  },
+  {
+   "q": "add proxy authentication headers",
+   "fts": 1,
+   "ftsTop3": [
+    "adapters.HTTPAdapter#proxy_headers",
+    "adapters.HTTPAdapter#add_headers",
+    "exceptions.ProxyError"
+   ]
+  },
+  {
+   "q": "requote a URI keeping unreserved characters",
+   "fts": 1,
+   "ftsTop3": [
+    "utils#requote_uri",
+    "tests.test_utils#test_requote_uri_with_unquoted_percents",
+    "tests.test_utils#test_unquote_unreserved"
+   ]
+  },
+  {
+   "q": "connection pool manager for each proxy",
+   "fts": 2,
+   "ftsTop3": [
+    "tests.test_requests#test_urllib3_pool_connection_closed",
+    "adapters.HTTPAdapter#proxy_manager_for",
+    "exceptions.ProxyError"
+   ]
+  },
+  {
+   "q": "send a GET request",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_respect_proxy_env_on_send_self_prepared_request",
+    "tests.test_requests.TestRequests#test_respect_proxy_env_on_send_session_prepared_request",
+    "sessions.SessionRedirectMixin#send"
+   ]
+  },
+  {
+   "q": "rewind the body of a request before resending it",
+   "fts": 4,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_rewind_body",
+    "tests.test_requests.TestRequests#test_rewind_partially_read_body",
+    "tests.test_requests.TestRequests#test_rewind_body_no_seek"
+   ]
+  }
+ ]
+}

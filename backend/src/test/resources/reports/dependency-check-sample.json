@@ -1,0 +1,18 @@
+{
+  "reportSchema": "1.1",
+  "scanInfo": {"engineVersion": "13.0.0"},
+  "projectInfo": {"name": "fixture"},
+  "dependencies": [
+    {
+      "fileName": "commons-text-1.9.jar",
+      "filePath": "/root/.m2/repository/org/apache/commons/commons-text/1.9/commons-text-1.9.jar",
+      "packages": [{"id": "pkg:maven/org.apache.commons/commons-text@1.9", "confidence": "HIGHEST"}],
+      "vulnerabilities": [
+        {"source": "NVD", "name": "CVE-2022-42889", "severity": "CRITICAL",
+         "cvssv3": {"baseScore": 9.8, "baseSeverity": "CRITICAL"}, "cwes": ["CWE-94"],
+         "description": "Apache Commons Text performs variable interpolation (Text4Shell)."}
+      ]
+    },
+    {"fileName": "guava-33.3.1-jre.jar", "packages": [{"id": "pkg:maven/com.google.guava/guava@33.3.1-jre"}]}
+  ]
+}

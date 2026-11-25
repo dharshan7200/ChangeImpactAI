@@ -1,0 +1,31 @@
+{
+  "repository": "spring-projects/spring-petclinic @ 500158f",
+  "note": "Labels written from the source before running any search. A hit is a chunk whose qualified name (without the org.springframework.samples.petclinic. prefix) is in 'relevant'.",
+  "queries": [
+    {"q": "how are vets cached", "relevant": ["system.CacheConfiguration", "system.CacheConfiguration#cacheConfiguration()", "system.CacheConfiguration#petclinicCacheConfigurationCustomizer()", "vet.VetRepository#findAll()", "vet.VetRepository#findAll(Pageable)"]},
+    {"q": "search owners by surname", "relevant": ["owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)", "owner.OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)", "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"]},
+    {"q": "reject a pet birth date in the future", "relevant": ["owner.PetController#processCreationForm(Owner,Pet,BindingResult,RedirectAttributes)", "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)", "owner.PetValidator#validate(Object,Errors)"]},
+    {"q": "pet name is required", "relevant": ["owner.PetValidator#validate(Object,Errors)", "owner.PetValidator"]},
+    {"q": "prevent two pets of the same owner having the same name", "relevant": ["owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)", "owner.PetController#processCreationForm(Owner,Pet,BindingResult,RedirectAttributes)", "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)"]},
+    {"q": "book a new visit for a pet", "relevant": ["owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)", "owner.VisitController#initNewVisitForm()", "owner.VisitController#loadPetWithVisit(int,int,Map)", "owner.Owner#addVisit(Integer,Visit)"]},
+    {"q": "visit date cannot be before today", "relevant": ["owner.VisitController#minVisitDate()", "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"]},
+    {"q": "convert the pet type text from the form into an object", "relevant": ["owner.PetTypeFormatter#parse(String,Locale)", "owner.PetTypeFormatter"]},
+    {"q": "list of all pet types", "relevant": ["owner.PetTypeRepository#findPetTypes()", "owner.PetController#populatePetTypes()", "owner.PetTypeRepository"]},
+    {"q": "switch the user interface language with a request parameter", "relevant": ["system.WebConfiguration#localeChangeInterceptor()", "system.WebConfiguration#localeResolver()", "system.WebConfiguration#addInterceptors(InterceptorRegistry)", "system.WebConfiguration"]},
+    {"q": "deliberately throw an exception to demonstrate the error page", "relevant": ["system.CrashController#triggerException()", "system.CrashController"]},
+    {"q": "home page", "relevant": ["system.WelcomeController#welcome()", "system.WelcomeController"]},
+    {"q": "veterinarians as JSON or XML", "relevant": ["vet.VetController#showResourcesVetList()", "vet.Vets", "vet.Vets#getVetList()"]},
+    {"q": "paginate the veterinarian list", "relevant": ["vet.VetController#showVetList(int,Model,RedirectAttributes)", "vet.VetController#findPaginated(int)", "vet.VetController#addPaginationModel(int,Page,Model)"]},
+    {"q": "number of specialties of a vet", "relevant": ["vet.Vet#getNrOfSpecialties()"]},
+    {"q": "edit an owner's contact details", "relevant": ["owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)", "owner.OwnerController#initUpdateOwnerForm()"]},
+    {"q": "register a new owner", "relevant": ["owner.OwnerController#processCreationForm(Owner,BindingResult,RedirectAttributes)", "owner.OwnerController#initCreationForm()"]},
+    {"q": "show the details page of one owner", "relevant": ["owner.OwnerController#showOwner(int)"]},
+    {"q": "stop the id field from being bound from request parameters", "relevant": ["owner.OwnerController#setAllowedFields(WebDataBinder)", "owner.PetController#initOwnerBinder(WebDataBinder)", "owner.VisitController#setAllowedFields(WebDataBinder)"]},
+    {"q": "find an owner's pet by name, optionally ignoring unsaved pets", "relevant": ["owner.Owner#getPet(String,boolean)", "owner.Owner#getPet(String)"]},
+    {"q": "has the entity been saved to the database yet", "relevant": ["model.BaseEntity#isNew()"]},
+    {"q": "native image runtime hints", "relevant": ["PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)", "PetClinicRuntimeHints"]},
+    {"q": "application entry point", "relevant": ["PetClinicApplication#main(String[])", "PetClinicApplication"]},
+    {"q": "update an existing pet", "relevant": ["owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)", "owner.PetController#updatePetDetails(Owner,Pet)", "owner.PetController#initUpdateForm()"]},
+    {"q": "add a pet to an owner", "relevant": ["owner.Owner#addPet(Pet)", "owner.PetController#processCreationForm(Owner,Pet,BindingResult,RedirectAttributes)"]}
+  ]
+}

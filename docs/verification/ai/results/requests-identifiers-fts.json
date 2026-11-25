@@ -1,0 +1,150 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "queries": 15,
+ "summary": {
+  "fts": {
+   "hit@1": 0.533,
+   "hit@5": 0.867,
+   "mrr@10": 0.683,
+   "medianMs": 18
+  }
+ },
+ "fallbacks": [],
+ "perQuery": [
+  {
+   "q": "should_strip_auth",
+   "fts": 6,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_should_strip_auth_host_change",
+    "tests.test_requests.TestRequests#test_should_strip_auth_http_downgrade",
+    "tests.test_requests.TestRequests#test_should_strip_auth_port_change"
+   ]
+  },
+  {
+   "q": "resolve_redirects",
+   "fts": 2,
+   "ftsTop3": [
+    "exceptions.TooManyRedirects",
+    "sessions.SessionRedirectMixin#resolve_redirects",
+    "compat#_resolve_char_detection"
+   ]
+  },
+  {
+   "q": "merge_environment_settings",
+   "fts": 1,
+   "ftsTop3": [
+    "sessions.Session#merge_environment_settings",
+    "sessions#merge_hooks",
+    "cookies#merge_cookies"
+   ]
+  },
+  {
+   "q": "prepare_body",
+   "fts": 2,
+   "ftsTop3": [
+    "tests.test_requests.TestRequests#test_prepare_body_position_non_stream",
+    "models.PreparedRequest#prepare_body",
+    "exceptions.UnrewindableBodyError"
+   ]
+  },
+  {
+   "q": "get_auth_from_url",
+   "fts": 1,
+   "ftsTop3": [
+    "utils#get_auth_from_url",
+    "tests.test_utils.TestGetNetrcAuth#test_not_vulnerable_to_bad_url_parsing",
+    "auth.HTTPDigestAuth#__init__"
+   ]
+  },
+  {
+   "q": "super_len",
+   "fts": null,
+   "ftsTop3": [
+    "tests.test_utils.TestSuperLen#test_super_len_with__len__",
+    "tests.test_utils.TestSuperLen#test_super_len_with_no__len__",
+    "tests.test_utils.TestSuperLen#test_string"
+   ]
+  },
+  {
+   "q": "default_user_agent",
+   "fts": 1,
+   "ftsTop3": [
+    "utils#default_user_agent",
+    "tests.test_requests.TestRequests#test_user_agent_transfers",
+    "tests.test_hooks#test_default_hooks"
+   ]
+  },
+  {
+   "q": "extract_cookies_to_jar",
+   "fts": 1,
+   "ftsTop3": [
+    "cookies#extract_cookies_to_jar",
+    "cookies.RequestsCookieJar#get_policy",
+    "cookies.RequestsCookieJar#__contains__"
+   ]
+  },
+  {
+   "q": "HTTPAdapter send",
+   "fts": 3,
+   "ftsTop3": [
+    "sessions.SessionRedirectMixin#send",
+    "tests.test_requests.RedirectSession#send",
+    "adapters.HTTPAdapter#send"
+   ]
+  },
+  {
+   "q": "iter_lines",
+   "fts": 1,
+   "ftsTop3": [
+    "models.Response#iter_lines",
+    "models.Response#iter_lines",
+    "tests.test_requests.TestRequests#test_response_iter_lines"
+   ]
+  },
+  {
+   "q": "RequestsCookieJar set_cookie",
+   "fts": 4,
+   "ftsTop3": [
+    "cookies.RequestsCookieJar#get_policy",
+    "cookies.RequestsCookieJar#__contains__",
+    "cookies.RequestsCookieJar#__iter__"
+   ]
+  },
+  {
+   "q": "PreparedRequest prepare_auth",
+   "fts": 2,
+   "ftsTop3": [
+    "models.PreparedRequest#prepare_method",
+    "models.PreparedRequest#prepare_auth",
+    "models.PreparedRequest#prepare_headers"
+   ]
+  },
+  {
+   "q": "to_key_val_list",
+   "fts": 1,
+   "ftsTop3": [
+    "utils#to_key_val_list",
+    "tests.test_utils.TestToKeyValList#test_invalid",
+    "utils#to_key_val_list"
+   ]
+  },
+  {
+   "q": "select_proxy",
+   "fts": 1,
+   "ftsTop3": [
+    "utils#select_proxy",
+    "exceptions.ProxyError",
+    "exceptions.InvalidProxyURL"
+   ]
+  },
+  {
+   "q": "dispatch_hook",
+   "fts": 1,
+   "ftsTop3": [
+    "hooks#dispatch_hook",
+    "tests.test_hooks#hook",
+    "models.RequestHooksMixin#deregister_hook"
+   ]
+  }
+ ]
+}

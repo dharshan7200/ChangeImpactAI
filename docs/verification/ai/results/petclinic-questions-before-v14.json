@@ -1,0 +1,699 @@
+{
+ "modes": {
+  "fts": {
+   "hit@1": 0.24,
+   "hit@5": 0.56,
+   "mrr@10": 0.372,
+   "medianMs": 16
+  },
+  "vector": {
+   "hit@1": 0.72,
+   "hit@5": 1.0,
+   "mrr@10": 0.83,
+   "medianMs": 263
+  },
+  "hybrid": {
+   "hit@1": 0.44,
+   "hit@5": 0.76,
+   "mrr@10": 0.57,
+   "medianMs": 273
+  }
+ },
+ "perQuery": [
+  {
+   "q": "how are vets cached",
+   "fts": {
+    "firstRelevantRank": 10,
+    "top3": [
+     "vet.VetController#showResourcesVetList()",
+     "vet.Vets",
+     "service.ClinicServiceTests#shouldFindVets()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetRepository#findAll()",
+     "vet.VetRepository",
+     "MySqlIntegrationTests#findAll()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "vet.VetRepository",
+     "vet.VetRepository#findAll()",
+     "vet.Vets"
+    ]
+   }
+  },
+  {
+   "q": "search owners by surname",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()",
+     "service.ClinicServiceTests"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.OwnerRepository",
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()",
+     "owner.OwnerRepository"
+    ]
+   }
+  },
+  {
+   "q": "reject a pet birth date in the future",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithInvalidBirthDate()",
+     "owner.Pet"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithInvalidBirthDate()",
+     "owner.PetValidator",
+     "owner.PetValidator#validate(Object,Errors)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithInvalidBirthDate()",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.Pet"
+    ]
+   }
+  },
+  {
+   "q": "pet name is required",
+   "fts": {
+    "firstRelevantRank": 5,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "service.ClinicServiceTests#shouldAllowSamePetNameForDifferentOwners()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetValidator#validate(Object,Errors)",
+     "owner.PetValidator",
+     "owner.PetValidatorTests$ValidateHasErrors#validateWithInvalidPetName()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetValidator",
+     "owner.PetValidator#validate(Object,Errors)",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "prevent two pets of the same owner having the same name",
+   "fts": {
+    "firstRelevantRank": 6,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "service.ClinicServiceTests#shouldUpdateOwner()",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "service.ClinicServiceTests#shouldAllowSamePetNameForDifferentOwners()",
+     "service.ClinicServiceTests#shouldFailToInsertDuplicatePetNameForSameOwner()",
+     "owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 4,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "service.ClinicServiceTests#shouldFailToInsertDuplicatePetNameForSameOwner()",
+     "service.ClinicServiceTests#shouldAllowSamePetNameForDifferentOwners()"
+    ]
+   }
+  },
+  {
+   "q": "book a new visit for a pet",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.PetValidatorTests"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#initNewVisitForm()",
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.Owner#addVisit(Integer,Visit)",
+     "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "visit date cannot be before today",
+   "fts": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.VisitControllerTests#processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture()",
+     "owner.Visit",
+     "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 4,
+    "top3": [
+     "owner.Visit#<init>()",
+     "owner.VisitControllerTests#processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture()",
+     "owner.Visit"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.VisitControllerTests#processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture()",
+     "owner.Visit",
+     "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "convert the pet type text from the form into an object",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.PetTypeFormatterTests",
+     "owner.PetTypeFormatter",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeFormatter#parse(String,Locale)",
+     "owner.PetTypeFormatter",
+     "owner.PetTypeFormatterTests#makePetTypes()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeFormatter",
+     "owner.PetTypeFormatterTests",
+     "owner.PetTypeFormatter#parse(String,Locale)"
+    ]
+   }
+  },
+  {
+   "q": "list of all pet types",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "service.ClinicServiceTests#shouldFindAllPetTypes()",
+     "owner.PetTypeFormatterTests",
+     "service.ClinicServiceTests#shouldAllowSamePetNameForDifferentOwners()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeRepository#findPetTypes()",
+     "owner.PetTypeRepository",
+     "service.ClinicServiceTests#shouldFindAllPetTypes()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 5,
+    "top3": [
+     "service.ClinicServiceTests#shouldFindAllPetTypes()",
+     "owner.PetTypeFormatterTests#makePetTypes()",
+     "owner.PetTypeFormatter"
+    ]
+   }
+  },
+  {
+   "q": "switch the user interface language with a request parameter",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration",
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration#localeChangeInterceptor()",
+     "system.WebConfiguration",
+     "system.WebConfiguration#addInterceptors(InterceptorRegistry)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration",
+     "owner.VisitController",
+     "owner.OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "deliberately throw an exception to demonstrate the error page",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "vet.VetController",
+     "owner.OwnerControllerTests#processFindFormRedirectsOutOfBoundsPageToFirstPage()",
+     "vet.VetControllerTests#showVetListRedirectsOutOfBoundsPageToFirstPage()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.CrashController#triggerException()",
+     "system.CrashController",
+     "system.CrashControllerTests"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "system.CrashControllerIntegrationTests#triggerExceptionHtml()",
+     "owner.OwnerControllerTests#processFindFormRedirectsOutOfBoundsPageToFirstPage()",
+     "system.CrashController#triggerException()"
+    ]
+   }
+  },
+  {
+   "q": "home page",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "vet.VetController",
+     "vet.VetController#findPaginated(int)",
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WelcomeController#welcome()",
+     "system.WelcomeController",
+     "system.WelcomeControllerTests"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 7,
+    "top3": [
+     "vet.VetRepository",
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)",
+     "owner.OwnerRepository"
+    ]
+   }
+  },
+  {
+   "q": "veterinarians as JSON or XML",
+   "fts": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "vet.VetControllerTests#showResourcesVetList()",
+     "system.CrashControllerIntegrationTests#triggerExceptionJson()",
+     "vet.Vets"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetController#showResourcesVetList()",
+     "vet.VetControllerTests#showResourcesVetList()",
+     "vet.Vets"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "vet.VetControllerTests#showResourcesVetList()",
+     "vet.Vets",
+     "vet.Vets#getVetList()"
+    ]
+   }
+  },
+  {
+   "q": "paginate the veterinarian list",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.OwnerController#addPaginationModel(int,Model,Page)",
+     "vet.VetController#addPaginationModel(int,Page,Model)",
+     "vet.VetControllerTests#showVetListHtml()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetController#findPaginated(int)",
+     "vet.VetController",
+     "vet.VetController#addPaginationModel(int,Page,Model)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetController#addPaginationModel(int,Page,Model)",
+     "owner.OwnerController#addPaginationModel(int,Model,Page)",
+     "vet.VetController"
+    ]
+   }
+  },
+  {
+   "q": "number of specialties of a vet",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "vet.Vet",
+     "vet.VetControllerTests",
+     "vet.VetController"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "vet.Vet",
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialtiesInternal()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 5,
+    "top3": [
+     "vet.Vet",
+     "vet.VetControllerTests",
+     "vet.VetController"
+    ]
+   }
+  },
+  {
+   "q": "edit an owner's contact details",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.OwnerController",
+     "owner.PetController"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.OwnerController#initUpdateOwnerForm()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.OwnerController",
+     "owner.OwnerController#showOwner(int)"
+    ]
+   }
+  },
+  {
+   "q": "register a new owner",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.OwnerController",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.OwnerController",
+     "owner.OwnerController#findOwner(Integer)",
+     "owner.OwnerController#processCreationForm(Owner,BindingResult,RedirectAttributes)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 6,
+    "top3": [
+     "owner.OwnerController",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.OwnerController#findOwner(Integer)"
+    ]
+   }
+  },
+  {
+   "q": "show the details page of one owner",
+   "fts": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.OwnerController",
+     "owner.OwnerController#showOwner(int)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#showOwner(int)",
+     "owner.OwnerControllerTests#showOwner()",
+     "PostgresIntegrationTests#ownerDetails()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#showOwner(int)",
+     "owner.OwnerControllerTests#showOwner()",
+     "owner.OwnerController"
+    ]
+   }
+  },
+  {
+   "q": "stop the id field from being bound from request parameters",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)",
+     "owner.VisitController"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#setAllowedFields(WebDataBinder)",
+     "owner.VisitController#setAllowedFields(WebDataBinder)",
+     "owner.PetController#initOwnerBinder(WebDataBinder)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": null,
+    "top3": [
+     "owner.VisitController",
+     "owner.OwnerController",
+     "owner.OwnerController#processUpdateOwnerForm(Owner,BindingResult,int,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "find an owner's pet by name, optionally ignoring unsaved pets",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.OwnerTests"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.Owner#getPet(String,boolean)",
+     "owner.Owner#getPet(String)",
+     "owner.Owner#getPet(Integer)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": null,
+    "top3": [
+     "service.ClinicServiceTests#shouldAllowSamePetNameForDifferentOwners()",
+     "owner.PetController#findPet(int,Integer)",
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()"
+    ]
+   }
+  },
+  {
+   "q": "has the entity been saved to the database yet",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "service.EntityUtils",
+     "owner.OwnerControllerTests#showOwner()",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "model.BaseEntity#isNew()",
+     "model.BaseEntity",
+     "service.ClinicServiceTests#shouldInsertPetIntoDatabaseAndGenerateId()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": null,
+    "top3": [
+     "service.ClinicServiceTests#shouldInsertPetIntoDatabaseAndGenerateId()",
+     "service.EntityUtils",
+     "model.NamedEntity"
+    ]
+   }
+  },
+  {
+   "q": "native image runtime hints",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints",
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicApplication"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints",
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicApplication"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints",
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicApplication"
+    ]
+   }
+  },
+  {
+   "q": "application entry point",
+   "fts": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "PostgresIntegrationTests$PropertiesLogger#onApplicationEvent(ApplicationPreparedEvent)",
+     "PostgresIntegrationTests$PropertiesLogger",
+     "PetClinicApplication"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicApplication#main(String[])",
+     "PetClinicApplication",
+     "PetClinicIntegrationTests#main(String[])"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicApplication",
+     "PostgresIntegrationTests$PropertiesLogger#onApplicationEvent(ApplicationPreparedEvent)",
+     "PetClinicApplication#main(String[])"
+    ]
+   }
+  },
+  {
+   "q": "update an existing pet",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.PetControllerTests#processUpdateFormSuccess()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.PetControllerTests$ProcessUpdateFormHasErrors"
+    ]
+   }
+  },
+  {
+   "q": "add a pet to an owner",
+   "fts": {
+    "firstRelevantRank": null,
+    "top3": [
+     "PetClinicConcurrencyTests#testDuplicatePetNameRaceConditionIsBlocked()",
+     "owner.OwnerTests",
+     "owner.VisitController#loadPetWithVisit(int,int,Map)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.Owner#addPet(Pet)",
+     "owner.OwnerTests#addPetAddsPersistedPet()",
+     "owner.OwnerTests"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 8,
+    "top3": [
+     "owner.OwnerTests",
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.OwnerTests#addPetDoesNotAddDuplicatePet()"
+    ]
+   }
+  }
+ ]
+}

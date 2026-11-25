@@ -1,0 +1,97 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "prefix": "requests.",
+ "note": "Held-out set (psf/requests, Python), written from the source after the full-text change and before any search on this repository.",
+ "queries": [
+  {
+   "q": "should_strip_auth",
+   "relevant": [
+    "sessions.SessionRedirectMixin#should_strip_auth"
+   ]
+  },
+  {
+   "q": "resolve_redirects",
+   "relevant": [
+    "sessions.SessionRedirectMixin#resolve_redirects"
+   ]
+  },
+  {
+   "q": "merge_environment_settings",
+   "relevant": [
+    "sessions.Session#merge_environment_settings"
+   ]
+  },
+  {
+   "q": "prepare_body",
+   "relevant": [
+    "models.PreparedRequest#prepare_body"
+   ]
+  },
+  {
+   "q": "get_auth_from_url",
+   "relevant": [
+    "utils#get_auth_from_url"
+   ]
+  },
+  {
+   "q": "super_len",
+   "relevant": [
+    "utils#super_len"
+   ]
+  },
+  {
+   "q": "default_user_agent",
+   "relevant": [
+    "utils#default_user_agent"
+   ]
+  },
+  {
+   "q": "extract_cookies_to_jar",
+   "relevant": [
+    "cookies#extract_cookies_to_jar"
+   ]
+  },
+  {
+   "q": "HTTPAdapter send",
+   "relevant": [
+    "adapters.HTTPAdapter#send"
+   ]
+  },
+  {
+   "q": "iter_lines",
+   "relevant": [
+    "models.Response#iter_lines"
+   ]
+  },
+  {
+   "q": "RequestsCookieJar set_cookie",
+   "relevant": [
+    "cookies.RequestsCookieJar#set_cookie"
+   ]
+  },
+  {
+   "q": "PreparedRequest prepare_auth",
+   "relevant": [
+    "models.PreparedRequest#prepare_auth"
+   ]
+  },
+  {
+   "q": "to_key_val_list",
+   "relevant": [
+    "utils#to_key_val_list"
+   ]
+  },
+  {
+   "q": "select_proxy",
+   "relevant": [
+    "utils#select_proxy"
+   ]
+  },
+  {
+   "q": "dispatch_hook",
+   "relevant": [
+    "hooks#dispatch_hook"
+   ]
+  }
+ ]
+}

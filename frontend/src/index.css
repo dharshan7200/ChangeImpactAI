@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: theme('colors.slate.950');
+    background-image:
+      radial-gradient(1200px 600px at 85% -10%, rgba(12, 185, 214, 0.07), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(56, 120, 220, 0.05), transparent 60%);
+    background-attachment: fixed;
+    color: theme('colors.slate.100');
+    font-family: theme('fontFamily.sans');
+    font-feature-settings: 'ss01', 'cv01';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: -0.015em;
+  }
+
+  code, pre, kbd, .font-mono {
+    font-family: theme('fontFamily.mono');
+  }
+
+  ::selection {
+    background: rgba(40, 213, 236, 0.28);
+    color: #fff;
+  }
+
+  /* Keyboard focus is always visible; mouse clicks do not draw rings. */
+  :focus-visible {
+    outline: 2px solid theme('colors.cyan.400');
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+
+/* Code browser (Monaco) gutter markers: declarations found by the analysis */
+.cia-glyph-type, .cia-glyph-member { border-radius: 9999px; margin-left: 6px; margin-top: 6px; width: 7px !important; height: 7px !important; }
+.cia-glyph-type { background: #3987e5; }
+.cia-glyph-member { background: #64748b; }
+
+/* Dependency graph: Defend against browser extensions that inject `* { pointer-events: auto !important; }` */
+.dependency-graph .react-flow__viewport,
+.dependency-graph .react-flow__viewport-portal,
+.dependency-graph .react-flow__nodes,
+.dependency-graph .react-flow__edgelabel-renderer,
+.dependency-graph .react-flow__edges,
+.dependency-graph .react-flow__edges svg {
+  pointer-events: none !important;
+}
+
+/* Individual edges: only the visible stroke can be hovered */
+.dependency-graph .react-flow__edge {
+  pointer-events: visibleStroke !important;
+}
+
+/* Nodes: elevated z-index, grab cursor for free dragging, and receives pointer clicks */
+.dependency-graph .react-flow__node {
+  z-index: 10 !important;
+  pointer-events: auto !important;
+  cursor: grab !important;
+}
+
+.dependency-graph .react-flow__node:active,
+.dependency-graph .react-flow__node.dragging {
+  cursor: grabbing !important;
+}
+
+.dependency-graph .react-flow__node * {
+  pointer-events: auto !important;
+}
+
+.dependency-graph .react-flow__pane {
+  pointer-events: auto !important;
+  cursor: grab !important;
+}
+
+.dependency-graph .react-flow__pane:active {
+  cursor: grabbing !important;
+}
+
+/* React Flow canvases (dependency graph, impact graph, …) on the ink palette instead of the library's neutral grey */
+.react-flow.dark {
+  --xy-background-color: theme('colors.slate.950');
+  --xy-background-pattern-color: theme('colors.slate.800');
+  --xy-controls-button-background-color: theme('colors.slate.900');
+  --xy-controls-button-background-color-hover: theme('colors.slate.800');
+  --xy-controls-button-color: theme('colors.slate.300');
+  --xy-controls-button-color-hover: theme('colors.white');
+  --xy-controls-button-border-color: theme('colors.slate.800');
+  --xy-controls-box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+  --xy-minimap-background-color: theme('colors.slate.900');
+  --xy-minimap-mask-background-color: rgba(11, 15, 22, 0.7);
+  --xy-edge-label-background-color: theme('colors.slate.900');
+  --xy-edge-label-color: theme('colors.slate.200');
+  --xy-attribution-background-color: transparent;
+}
+.react-flow__controls { border-radius: 10px; overflow: hidden; }

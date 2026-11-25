@@ -1,0 +1,329 @@
+# ============================================================
+# ChangeImpact AI — Application Configuration
+# Active profile: dev
+# ============================================================
+
+spring:
+  application:
+    name: changeimpact-ai
+  profiles:
+    active: ${APP_PROFILE:dev}
+
+  # ---- Data Source ----
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:changeimpact}}}
+    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:changeimpact}}
+    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:changeimpact}}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+      pool-name: ChangeImpactHikariPool
+
+  # ---- JPA ----
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: true   # explicit (was implicit); controllers map lazy associations into DTOs
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  # ---- Uploads (CI quality reports) ----
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 55MB
+
+  # ---- Flyway ----
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+
+  # ---- Redis ----
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+
+  # ---- RabbitMQ ----
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    listener:
+      simple:
+        prefetch: 1
+        retry:
+          enabled: true
+          initial-interval: 2000ms
+          max-attempts: 3
+          max-interval: 10000ms
+          multiplier: 2.0
+
+  # ---- Jackson ----
+  jackson:
+    # Jackson 3: dates are written as ISO-8601 strings by default (no write-dates-as-timestamps flag needed)
+    serialization:
+      indent-output: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+    time-zone: UTC
+
+  # ---- Async ----
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 16
+        queue-capacity: 100
+      thread-name-prefix: changeimpact-async-
+
+  # ---- Spring AI (2.0.x) : Google Gemini (primary provider) ----
+  # The API key is injected by the network proxy (environment network secret on
+  # generativelanguage.googleapis.com, header x-goog-api-key) or set via GEMINI_API_KEY.
+  # The placeholder below only satisfies client construction; it is never a real key.
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:injected-by-proxy}
+        chat:
+          options:
+            model: ${GEMINI_CHAT_MODEL:gemini-3.5-flash}
+            temperature: 0.1
+        embedding:
+          api-key: ${GEMINI_API_KEY:injected-by-proxy}
+          text:
+            options:
+              model: ${GEMINI_EMBEDDING_MODEL:gemini-embedding-001}
+              dimensions: 768
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 768
+        schema-name: public
+        table-name: vector_store
+        initialize-schema: false
+
+# ---- Server ----
+server:
+  port: ${PORT:${SERVER_PORT:8080}}
+  tomcat:
+    # JUnit uploads may carry one part per Surefire TEST-*.xml (the service allows up to 500 files)
+    max-part-count: 520
+  servlet:
+    context-path: /
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+# ---- Actuator ----
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  metrics:
+    tags:
+      application: changeimpact-ai
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true   # latency quantiles in Grafana (histogram_quantile)
+  # Phase 6 observability. Prometheus pulls /actuator/prometheus (scrape token: app.security.metrics-scrape-token).
+  # OpenTelemetry (OTLP over HTTP) is off unless enabled: traces, and optionally metrics/logs pushed to a collector.
+  tracing:
+    export:
+      enabled: ${OTEL_TRACING_ENABLED:false}
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+  otlp:
+    metrics:
+      export:
+        enabled: ${OTEL_METRICS_EXPORT_ENABLED:false}
+        url: ${OTEL_EXPORTER_OTLP_METRICS_ENDPOINT:http://localhost:4318/v1/metrics}
+  logging:
+    export:
+      otlp:
+        enabled: false
+
+# ---- API Documentation ----
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    disable-swagger-default-url: true
+  packages-to-scan: com.changeimpact
+
+# ---- Application Properties ----
+app:
+  # Languages analysed: "all" (default) = Java, Python, JavaScript/TypeScript (incl. React), PHP, C#, Go, Ruby, HTML,
+  # CSS, SQL. Or a list ("java,python,javascript"); "-name" removes one ("all,-sql"). Java is always on. docs/MULTI_LANGUAGE.md
+  analysis:
+    languages: ${ANALYSIS_LANGUAGES:all}
+    # Dependency jars of analysed Java projects for the symbol solver (Maven/Gradle builds, Maven Central only).
+    # Jars are read for type information, never executed. Off → library calls are UNRESOLVED (docs/LIBRARY_RESOLUTION.md).
+    libraries:
+      enabled: ${LIBRARY_RESOLUTION_ENABLED:true}
+      repository-url: ${LIBRARY_REPOSITORY_URL:https://repo.maven.apache.org/maven2}
+      cache-path: ${LIBRARY_CACHE_PATH:${java.io.tmpdir}/changeimpact/libraries}
+      max-artifacts: ${LIBRARY_MAX_ARTIFACTS:400}
+      max-total-mb: ${LIBRARY_MAX_TOTAL_MB:1024}
+      timeout-seconds: ${LIBRARY_TIMEOUT_SECONDS:300}
+  # Phase 4 AI review / assistant (Google Gemini). Enabled when GEMINI_API_KEY is non-blank (AiAvailability).
+  ai:
+    base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta}
+    chat-model: ${GEMINI_CHAT_MODEL:gemini-3.5-flash}
+    fallback-model: ${GEMINI_FALLBACK_MODEL:gemini-3.1-flash-lite}
+    embedding-model: ${GEMINI_EMBEDDING_MODEL:gemini-embedding-001}
+    embedding-dimensions: 768
+    timeout-seconds: ${GEMINI_TIMEOUT_SECONDS:90}
+    embed-per-minute: ${GEMINI_EMBED_PER_MINUTE:100}   # free tier: 100 texts/min; raise on a paid plan
+  security:
+    jwt:
+      secret: ${JWT_SECRET:changeimpact-jwt-secret-key-must-be-at-least-32-characters-long-for-hs256}
+      access-token-expiry-ms: ${JWT_ACCESS_EXPIRY_MS:86400000}       # 24 hours for dev convenience
+      refresh-token-expiry-ms: ${JWT_REFRESH_EXPIRY_MS:604800000}  # 7 days
+    bcrypt:
+      strength: ${BCRYPT_STRENGTH:12}
+    allowed-origins:
+      - ${FRONTEND_URL:http://localhost:5173}
+      - http://localhost:3000
+    admin-emails: ${ADMIN_EMAILS:}
+    metrics-scrape-token: ${METRICS_SCRAPE_TOKEN:}   # Prometheus: authorization.credentials (≥ 24 chars in prod)
+    rate-limit:
+      enabled: ${RATE_LIMIT_ENABLED:true}
+      auth-requests-per-minute: ${RATE_LIMIT_AUTH_PER_MINUTE:10}
+      api-requests-per-minute: ${RATE_LIMIT_API_PER_MINUTE:300}
+      webhook-requests-per-minute: ${RATE_LIMIT_WEBHOOK_PER_MINUTE:600}
+
+  github:
+    # GitHub App (Phase 5): webhooks + Check Runs. Leave empty to disable; manual analyses keep working.
+    app-id: ${GITHUB_APP_ID:}
+    client-id: ${GITHUB_APP_CLIENT_ID:}
+    app-slug: ${GITHUB_APP_SLUG:}
+    private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH:}
+    private-key: ${GITHUB_APP_PRIVATE_KEY:}
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}
+    public-url: ${CHANGEIMPACT_PUBLIC_URL:}
+    analyze-draft-pull-requests: false
+    checks:
+      enabled: true
+      name: ChangeImpact AI
+      fail-on: ${GITHUB_CHECKS_FAIL_ON:CRITICAL}   # LOW | MEDIUM | HIGH | CRITICAL | NEVER
+      fail-on-security: ${GITHUB_CHECKS_FAIL_ON_SECURITY:HIGH}   # introduced vulnerabilities (Semgrep, Dependency-Check)
+      max-annotations: 150
+    oauth:                      # OAuth App: "Connect with GitHub" (private repositories); see docs/CONFIGURATION.md
+      client-id: ${GITHUB_OAUTH_CLIENT_ID:}
+      client-secret: ${GITHUB_OAUTH_CLIENT_SECRET:}
+      web-base-url: ${GITHUB_WEB_BASE_URL:https://github.com}
+      redirect-uri: ${GITHUB_OAUTH_REDIRECT_URI:${FRONTEND_URL:http://localhost:5173}/github/oauth/callback}
+      scopes: ${GITHUB_OAUTH_SCOPES:repo read:user user:email}
+    api-base-url: ${GITHUB_API_BASE_URL:https://api.github.com}
+    clone-timeout-seconds: 300
+    max-repo-size-mb: 500
+
+  retention:
+    enabled: ${RETENTION_ENABLED:true}
+    analyses-days: ${RETENTION_ANALYSES_DAYS:180}
+    webhook-deliveries-days: ${RETENTION_WEBHOOK_DAYS:30}
+    quality-reports-days: ${RETENTION_REPORTS_DAYS:90}
+
+  ingestion:
+    allow-local-repositories: ${ALLOW_LOCAL_REPOSITORIES:false}
+    allowed-git-hosts: ${ALLOWED_GIT_HOSTS:github.com}
+    allow-private-git-addresses: ${ALLOW_PRIVATE_GIT_ADDRESSES:false}
+    workspace-base-path: ${INGESTION_WORKSPACE_PATH:${java.io.tmpdir}/changeimpact/workspaces}
+    max-concurrent-jobs: ${MAX_CONCURRENT_JOBS:3}        # RabbitMQ consumers per queue (each job holds a parse in memory)
+    job-timeout-minutes: ${JOB_TIMEOUT_MINUTES:30}       # watchdog: RUNNING longer than this → FAILED
+    queued-timeout-minutes: ${JOB_QUEUED_TIMEOUT_MINUTES:720}  # watchdog: QUEUED longer than this → FAILED
+    watchdog-interval-ms: 300000
+    incremental-enabled: ${INCREMENTAL_ANALYSIS_ENABLED:true}  # reuse unaffected files of an analysed commit
+    incremental-max-fraction: 0.5                        # above this share of files to re-parse, parse everything
+    max-files-per-repository: 10000
+    excluded-paths:
+      - target/
+      - build/
+      - .gradle/
+      - node_modules/
+      - .git/
+      - out/
+      - bin/
+      - generated/
+      - generated-sources/
+
+  # ---- Phase 3: change impact analysis (defaults shown; all optional) ----
+  history:
+    max-commits: 300            # commits scanned for churn / revert / bug-fix labels
+  impact:
+    default-max-depth: 3
+    max-depth-limit: 6
+    depth-decay: 0.85           # strength multiplier per hop after the first
+    max-findings-per-change: 500
+  risk:                         # weighted heuristic, 0-100 points, NOT a probability
+    medium-threshold: 25
+    high-threshold: 50
+    critical-threshold: 75
+    # weights.<factor> and critical-modules[] can be overridden here; see AppProperties.Risk
+
+  rabbitmq:
+    queues:
+      repository-index: changeimpact.repository.index
+      repository-index-dlq: changeimpact.repository.index.dlq
+      analysis-job: changeimpact.analysis.job
+      analysis-job-dlq: changeimpact.analysis.job.dlq
+    exchanges:
+      main: changeimpact.main
+      dead-letter: changeimpact.dead-letter
+
+logging:
+  level:
+    com.changeimpact: INFO
+    org.springframework.security: WARN
+    org.springframework.amqp: WARN
+    org.hibernate.SQL: WARN
+    org.flywaydb: INFO
+  # %maskedMsg / %maskedEx (logback-spring.xml) mask tokens, keys and passwords in messages and stack traces
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %maskedMsg%n%maskedEx"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %maskedMsg%n%maskedEx"
+  file:
+    name: logs/changeimpact.log
+    max-size: 50MB
+    max-history: 30
+

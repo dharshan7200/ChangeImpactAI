@@ -1,0 +1,521 @@
+# ChangeImpact AI — bundled Semgrep rules for Python, JavaScript/TypeScript, PHP, C#, Go and Ruby (run offline with
+# --metrics=off). Same scope as the Java rules: injection, dangerous execution and deserialization, weak crypto,
+# disabled TLS verification, XSS sinks, hard-coded credentials. A match is a lead for review, not proof.
+# Every rule has positive and negative cases in src/test/resources/security-fixture (SemgrepRunnerTest).
+rules:
+  # ------------------------------------------------------------------ Python
+  - id: cia.python.sql-injection.formatted-query
+    languages: [python]
+    severity: ERROR
+    message: SQL built with string formatting or concatenation is executed; pass parameters separately (cursor.execute(sql, params)).
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: $C.execute($A + $B, ...)
+          - pattern: $C.execute("..." % $X, ...)
+          - pattern: $C.execute("...".format(...), ...)
+          - pattern: $C.execute(f"...", ...)
+          - pattern: $C.executemany($A + $B, ...)
+          - pattern: $C.raw($A + $B, ...)
+          - pattern: $C.raw(f"...", ...)
+          - pattern: sqlalchemy.text(f"...")
+      - pattern-not: $C.$M("..." + "...", ...)
+
+  - id: cia.python.injection.command-execution
+    languages: [python]
+    severity: ERROR
+    message: A command is run through a shell or built from a variable; use a list of arguments without shell=True.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    pattern-either:
+      - patterns:
+          - pattern: os.system($CMD)
+          - pattern-not: os.system("...")
+      - patterns:
+          - pattern: os.popen($CMD, ...)
+          - pattern-not: os.popen("...", ...)
+      - pattern: subprocess.$F(..., shell=True, ...)
+
+  - id: cia.python.injection.eval
+    languages: [python]
+    severity: ERROR
+    message: eval/exec of a non-constant expression executes arbitrary code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-95: Eval Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: eval($X, ...)
+          - pattern: exec($X, ...)
+      - pattern-not: eval("...", ...)
+      - pattern-not: exec("...", ...)
+
+  - id: cia.python.deserialization.unsafe-load
+    languages: [python]
+    severity: ERROR
+    message: Deserializing untrusted data with pickle/marshal or yaml.load without SafeLoader can execute code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-502: Deserialization of Untrusted Data"}
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+      - pattern: marshal.loads(...)
+      - patterns:
+          - pattern: yaml.load(...)
+          - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
+          - pattern-not: yaml.load(..., Loader=yaml.CSafeLoader, ...)
+
+  - id: cia.python.crypto.weak-hash
+    languages: [python]
+    severity: WARNING
+    message: Weak hash algorithm (MD5/SHA-1) must not protect passwords or integrity.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-328: Use of Weak Hash"}
+    pattern-either:
+      - pattern: hashlib.md5(...)
+      - pattern: hashlib.sha1(...)
+      - pattern: hashlib.new("md5", ...)
+      - pattern: hashlib.new("sha1", ...)
+
+  - id: cia.python.tls.verification-disabled
+    languages: [python]
+    severity: ERROR
+    message: TLS certificate verification is disabled.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern-either:
+      - pattern: requests.$M(..., verify=False, ...)
+      - pattern: httpx.$M(..., verify=False, ...)
+      - pattern: ssl._create_unverified_context(...)
+
+  - id: cia.python.secrets.hardcoded-credential
+    languages: [python]
+    severity: ERROR
+    message: A credential is hard-coded in source; read it from the environment or a secret store.
+    metadata: {category: SENSITIVE_DATA, cwe: "CWE-798: Use of Hard-coded Credentials"}
+    patterns:
+      - pattern-either:
+          - pattern: $NAME = "$VALUE"
+          - pattern: $F(..., $NAME="$VALUE", ...)
+      - metavariable-regex: {metavariable: $NAME, regex: '(?i)^\w*(password|passwd|secret|api_?key|token)\w*$'}
+      - metavariable-regex: {metavariable: $VALUE, regex: '^.{6,}$'}
+
+  # ------------------------------------------------------------------ JavaScript / TypeScript
+  - id: cia.js.sql-injection.concatenated-query
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: SQL built by concatenation or a template literal is executed; use placeholders and a values array.
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: $DB.query($A + $B, ...)
+          - pattern: $DB.query(`...${$X}...`, ...)
+          - pattern: $DB.execute($A + $B, ...)
+          - pattern: $DB.execute(`...${$X}...`, ...)
+          - pattern: $DB.$queryRawUnsafe(...)
+          - pattern: $DB.$executeRawUnsafe(...)
+          - pattern: $DB.raw($A + $B, ...)
+          - pattern: $DB.raw(`...${$X}...`, ...)
+      - pattern-not: $DB.$M("..." + "...", ...)
+
+  - id: cia.js.injection.command-execution
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: A shell command is built from a variable (child_process.exec runs it through a shell); use execFile with an argument array.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: child_process.exec($CMD, ...)
+          - pattern: child_process.execSync($CMD, ...)
+          - pattern: require('child_process').exec($CMD, ...)
+          - pattern: require('child_process').execSync($CMD, ...)
+      - pattern-not: child_process.$F("...", ...)
+      - pattern-not: require('child_process').$F("...", ...)
+
+  - id: cia.js.injection.eval
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: eval / new Function / string timers execute arbitrary code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-95: Eval Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: new Function(...)
+          - pattern: setTimeout("...", ...)
+      - pattern-not: eval("...")
+
+  - id: cia.js.xss.raw-html
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: HTML is inserted without escaping (dangerouslySetInnerHTML / innerHTML / document.write); sanitize it first.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-79: Cross-site Scripting"}
+    patterns:
+      - pattern-either:
+          - pattern: '<$EL dangerouslySetInnerHTML={...} />'
+          - pattern: '<$EL dangerouslySetInnerHTML={...}>...</$EL>'
+          - pattern: $E.innerHTML = $V
+          - pattern: $E.outerHTML = $V
+          - pattern: document.write(...)
+      - pattern-not: $E.innerHTML = "..."
+      - pattern-not: '<$EL dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(...)}} />'
+      - pattern-not: '<$EL dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(...)}}>...</$EL>'
+
+  - id: cia.js.crypto.weak-hash
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: Weak hash algorithm (MD5/SHA-1) must not protect passwords or integrity.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-328: Use of Weak Hash"}
+    pattern-either:
+      - pattern: $C.createHash("md5")
+      - pattern: $C.createHash("sha1")
+
+  - id: cia.js.tls.verification-disabled
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: TLS certificate verification is disabled.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern-either:
+      - pattern: "{..., rejectUnauthorized: false, ...}"
+      - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+
+  - id: cia.js.secrets.hardcoded-credential
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: A credential is hard-coded in source; read it from the environment or a secret store.
+    metadata: {category: SENSITIVE_DATA, cwe: "CWE-798: Use of Hard-coded Credentials"}
+    patterns:
+      - pattern-either:
+          - pattern: const $NAME = "$VALUE"
+          - pattern: let $NAME = "$VALUE"
+          - pattern: "{..., $NAME: \"$VALUE\", ...}"
+      - metavariable-regex: {metavariable: $NAME, regex: '(?i)^\w*(password|passwd|secret|api_?key|token)\w*$'}
+      - metavariable-regex: {metavariable: $VALUE, regex: '^.{6,}$'}
+
+  # ------------------------------------------------------------------ PHP
+  - id: cia.php.sql-injection.concatenated-query
+    languages: [php]
+    severity: ERROR
+    message: SQL built by concatenation or interpolation is executed; use prepared statements / query bindings.
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: mysqli_query($C, "..." . $X, ...)
+          - pattern: mysqli_query($C, "...$X...", ...)
+          - pattern: $DB->query("..." . $X, ...)
+          - pattern: $DB->query("...$X...", ...)
+          - pattern: $DB->exec("..." . $X)
+          - pattern: $DB->exec("...$X...")
+          - pattern: DB::select("..." . $X, ...)
+          - pattern: DB::statement("..." . $X, ...)
+          - pattern: DB::raw("..." . $X)
+          - pattern: DB::raw("...$X...")
+          - pattern: $Q->whereRaw("..." . $X, ...)
+          - pattern: $Q->whereRaw("...$X...", ...)
+          - pattern: $Q->orderByRaw("..." . $X, ...)
+
+  - id: cia.php.injection.command-execution
+    languages: [php]
+    severity: ERROR
+    message: A shell command is built from a variable; escape it with escapeshellarg or avoid the shell.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: exec($CMD, ...)
+          - pattern: system($CMD, ...)
+          - pattern: shell_exec($CMD)
+          - pattern: passthru($CMD, ...)
+          - pattern: popen($CMD, ...)
+          - pattern: proc_open($CMD, ...)
+      - pattern-not: $F("...", ...)
+      - pattern-not: $F(escapeshellcmd(...), ...)
+      - pattern-not: $F("..." . escapeshellarg(...), ...)
+
+  - id: cia.php.injection.eval
+    languages: [php]
+    severity: ERROR
+    message: eval / assert / create_function on a non-constant string executes arbitrary code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-95: Eval Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: assert($X)
+          - pattern: create_function(...)
+      - pattern-not: eval("...")
+      - pattern-not: assert("...")
+
+  - id: cia.php.deserialization.unserialize
+    languages: [php]
+    severity: ERROR
+    message: unserialize on data that may be user-controlled can instantiate arbitrary objects; use json_decode or allowed_classes => false.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-502: Deserialization of Untrusted Data"}
+    patterns:
+      - pattern: unserialize(...)
+      - pattern-not: unserialize($X, ['allowed_classes' => false])
+
+  - id: cia.php.xss.echo-request
+    languages: [php]
+    severity: WARNING
+    message: Request input is echoed without escaping; use htmlspecialchars / the template engine's escaping.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-79: Cross-site Scripting"}
+    pattern-either:
+      - pattern: echo $_GET[...];
+      - pattern: echo $_POST[...];
+      - pattern: echo $_REQUEST[...];
+      - pattern: print($_GET[...]);
+
+  - id: cia.php.crypto.weak-hash
+    languages: [php]
+    severity: WARNING
+    message: Weak hash (MD5/SHA-1) must not protect passwords; use password_hash().
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-328: Use of Weak Hash"}
+    pattern-either:
+      - pattern: md5(...)
+      - pattern: sha1(...)
+      - pattern: hash("md5", ...)
+      - pattern: hash("sha1", ...)
+
+  - id: cia.php.tls.verification-disabled
+    languages: [php]
+    severity: ERROR
+    message: TLS certificate verification is disabled.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern-either:
+      - pattern: curl_setopt($H, CURLOPT_SSL_VERIFYPEER, false)
+      - pattern: curl_setopt($H, CURLOPT_SSL_VERIFYHOST, 0)
+      - pattern: Http::withoutVerifying()
+
+  # ------------------------------------------------------------------ C#
+  - id: cia.csharp.sql-injection.concatenated-query
+    languages: [csharp]
+    severity: ERROR
+    message: SQL built by concatenation, interpolation or string.Format is executed; use parameters (SqlParameter, FromSqlInterpolated/ExecuteSql, Dapper parameters).
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: new SqlCommand($A + $B, ...)
+          - pattern: new SqlCommand($"...", ...)
+          - pattern: new SqlCommand(string.Format(...), ...)
+          - pattern: $CMD.CommandText = $A + $B
+          - pattern: $CMD.CommandText = $"..."
+          - pattern: $DB.FromSqlRaw($A + $B, ...)
+          - pattern: $DB.FromSqlRaw($"...", ...)
+          - pattern: $DB.ExecuteSqlRaw($A + $B, ...)
+          - pattern: $DB.ExecuteSqlRaw($"...", ...)
+          - pattern: $CONN.Query<$T>($A + $B, ...)
+          - pattern: $CONN.Execute($A + $B, ...)
+      - pattern-not: new SqlCommand("..." + "...", ...)
+      - pattern-not: $DB.$M("..." + "...", ...)
+
+  - id: cia.csharp.injection.command-execution
+    languages: [csharp]
+    severity: ERROR
+    message: A process is started with a command or arguments built from a variable.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: Process.Start($CMD, ...)
+          - pattern: System.Diagnostics.Process.Start($CMD, ...)
+      - pattern-not: Process.Start("...")
+      - pattern-not: Process.Start("...", "...")
+      - pattern-not: System.Diagnostics.Process.Start("...")
+
+  - id: cia.csharp.deserialization.binary-formatter
+    languages: [csharp]
+    severity: ERROR
+    message: BinaryFormatter/NetDataContractSerializer/LosFormatter deserialization of untrusted data executes code (obsolete in .NET 5+).
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-502: Deserialization of Untrusted Data"}
+    pattern-either:
+      - pattern: new BinaryFormatter()
+      - pattern: new NetDataContractSerializer(...)
+      - pattern: new LosFormatter(...)
+      - pattern: "new JsonSerializerSettings { ..., TypeNameHandling = TypeNameHandling.All, ... }"
+
+  - id: cia.csharp.crypto.weak-algorithm
+    languages: [csharp]
+    severity: WARNING
+    message: Weak hash or cipher (MD5, SHA-1, DES, TripleDES, RC2) must not protect passwords or data.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-327: Broken or Risky Cryptographic Algorithm"}
+    pattern-either:
+      - pattern: MD5.Create(...)
+      - pattern: SHA1.Create(...)
+      - pattern: MD5.HashData(...)
+      - pattern: SHA1.HashData(...)
+      - pattern: new MD5CryptoServiceProvider()
+      - pattern: new SHA1Managed()
+      - pattern: DES.Create(...)
+      - pattern: TripleDES.Create(...)
+      - pattern: RC2.Create(...)
+
+  - id: cia.csharp.tls.verification-disabled
+    languages: [csharp]
+    severity: ERROR
+    message: TLS certificate validation always succeeds.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern-either:
+      - pattern: $H.ServerCertificateCustomValidationCallback = ($A, $B, $C, $D) => true
+      - pattern: ServicePointManager.ServerCertificateValidationCallback = ($A, $B, $C, $D) => true
+      - pattern: $H.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+
+  - id: cia.csharp.secrets.hardcoded-credential
+    languages: [csharp]
+    severity: ERROR
+    message: A credential is hard-coded in source; use configuration / user secrets / a key vault.
+    metadata: {category: SENSITIVE_DATA, cwe: "CWE-798: Use of Hard-coded Credentials"}
+    patterns:
+      - pattern-either:
+          - pattern: $T $NAME = "$VALUE";
+          - pattern: $NAME = "$VALUE"
+      - metavariable-regex: {metavariable: $NAME, regex: '(?i)^_?\w*(password|passwd|secret|apikey|api_key|token)\w*$'}
+      - metavariable-regex: {metavariable: $VALUE, regex: '^.{6,}$'}
+
+  # ------------------------------------------------------------------ Go
+  - id: cia.go.sql-injection.formatted-query
+    languages: [go]
+    severity: ERROR
+    message: SQL built with fmt.Sprintf or concatenation is executed; use placeholders and arguments.
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: $DB.$M(fmt.Sprintf(...), ...)
+          - pattern: $DB.$M($CTX, fmt.Sprintf(...), ...)
+          - pattern: $DB.$M($A + $B, ...)
+          - pattern: $DB.$M($CTX, $A + $B, ...)
+      - pattern-not: $DB.$M("..." + "...", ...)
+      - metavariable-regex: {metavariable: $M, regex: '^(Query|QueryRow|Exec|QueryContext|QueryRowContext|ExecContext|Prepare|PrepareContext|Raw|Select|Get)$'}
+
+  - id: cia.go.injection.command-execution
+    languages: [go]
+    severity: ERROR
+    message: A command is run through a shell with a non-constant script.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: exec.Command("sh", "-c", $CMD)
+          - pattern: exec.Command("bash", "-c", $CMD)
+          - pattern: exec.CommandContext($CTX, "sh", "-c", $CMD)
+          - pattern: exec.CommandContext($CTX, "bash", "-c", $CMD)
+      - pattern-not: exec.Command($S, "-c", "...")
+      - pattern-not: exec.CommandContext($CTX, $S, "-c", "...")
+
+  - id: cia.go.crypto.weak-hash
+    languages: [go]
+    severity: WARNING
+    message: Weak hash or cipher (MD5, SHA-1, DES, RC4) must not protect passwords or data.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-327: Broken or Risky Cryptographic Algorithm"}
+    pattern-either:
+      - pattern: md5.New()
+      - pattern: md5.Sum(...)
+      - pattern: sha1.New()
+      - pattern: sha1.Sum(...)
+      - pattern: des.NewCipher(...)
+      - pattern: rc4.NewCipher(...)
+
+  - id: cia.go.tls.verification-disabled
+    languages: [go]
+    severity: ERROR
+    message: TLS certificate verification is disabled (InsecureSkipVerify).
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern: "tls.Config{..., InsecureSkipVerify: true, ...}"
+
+  - id: cia.go.random.insecure-for-security
+    languages: [go]
+    severity: WARNING
+    message: math/rand is predictable; use crypto/rand for tokens, keys and passwords.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-338: Use of Cryptographically Weak PRNG"}
+    patterns:
+      - pattern-either:
+          - pattern: rand.Read(...)
+          - pattern: rand.Intn(...)
+          - pattern: rand.Int63(...)
+      - pattern-inside: |
+          import "math/rand"
+          ...
+      - pattern-inside: |
+          func $F(...) $R {
+            ...
+          }
+      - metavariable-regex: {metavariable: $F, regex: '(?i).*(token|secret|password|key|nonce|salt|session).*'}
+
+  # ------------------------------------------------------------------ Ruby
+  - id: cia.ruby.sql-injection.interpolated-query
+    languages: [ruby]
+    severity: ERROR
+    message: SQL with string interpolation is executed; use bind parameters (where("name = ?", name) / hash conditions).
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    pattern-either:
+      - pattern: $M.where("...#{$X}...", ...)
+      - pattern: $M.order("...#{$X}...")
+      - pattern: $M.find_by_sql("...#{$X}...", ...)
+      - pattern: $M.find_by_sql("..." + $X, ...)
+      - pattern: $C.execute("...#{$X}...", ...)
+      - pattern: $C.execute("..." + $X, ...)
+      - pattern: $C.exec_query("...#{$X}...", ...)
+      - pattern: $M.where("..." + $X, ...)
+
+  - id: cia.ruby.injection.command-execution
+    languages: [ruby]
+    severity: ERROR
+    message: A shell command is built with interpolation; pass arguments separately (system("cmd", arg)).
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    pattern-either:
+      - pattern: system("...#{$X}...")
+      - pattern: exec("...#{$X}...")
+      - pattern: "`...#{$X}...`"
+      - pattern: '%x(...#{$X}...)'
+      - pattern: Open3.$M("...#{$X}...", ...)
+      - pattern: IO.popen("...#{$X}...", ...)
+
+  - id: cia.ruby.injection.eval
+    languages: [ruby]
+    severity: ERROR
+    message: eval / instance_eval / send with a non-constant argument executes arbitrary code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-95: Eval Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: eval($X, ...)
+          - pattern: $O.instance_eval($X, ...)
+          - pattern: $O.class_eval($X, ...)
+          - pattern: $O.send(params[...], ...)
+          - pattern: $O.public_send(params[...], ...)
+      - pattern-not: eval("...", ...)
+      - pattern-not: $O.instance_eval("...", ...)
+      - pattern-not: $O.class_eval("...", ...)
+
+  - id: cia.ruby.deserialization.unsafe-load
+    languages: [ruby]
+    severity: ERROR
+    message: Marshal.load / YAML.load (unsafe in Psych < 4) on untrusted data can execute code; use JSON or YAML.safe_load.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-502: Deserialization of Untrusted Data"}
+    pattern-either:
+      - pattern: Marshal.load(...)
+      - pattern: Marshal.restore(...)
+      - pattern: YAML.unsafe_load(...)
+      - pattern: Psych.unsafe_load(...)
+
+  - id: cia.ruby.xss.unescaped-output
+    languages: [ruby]
+    severity: WARNING
+    message: Output is marked HTML-safe without escaping (html_safe / raw); sanitize it first.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-79: Cross-site Scripting"}
+    patterns:
+      - pattern-either:
+          - pattern: $X.html_safe
+          - pattern: raw($X)
+      - pattern-not: '"...".html_safe'
+      - pattern-not: raw("...")
+
+  - id: cia.ruby.crypto.weak-hash
+    languages: [ruby]
+    severity: WARNING
+    message: Weak hash algorithm (MD5/SHA-1) must not protect passwords or integrity.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-328: Use of Weak Hash"}
+    pattern-either:
+      - pattern: Digest::MD5.$M(...)
+      - pattern: Digest::SHA1.$M(...)
+      - pattern: OpenSSL::Digest::MD5.new(...)
+      - pattern: OpenSSL::Digest.new("MD5")
+      - pattern: OpenSSL::Digest.new("SHA1")
+
+  - id: cia.ruby.tls.verification-disabled
+    languages: [ruby]
+    severity: ERROR
+    message: TLS certificate verification is disabled (VERIFY_NONE).
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-295: Improper Certificate Validation"}
+    pattern-either:
+      - pattern: $H.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      - pattern: "{..., verify_mode: OpenSSL::SSL::VERIFY_NONE, ...}"
+      - pattern: "{..., ssl_verify: false, ...}"

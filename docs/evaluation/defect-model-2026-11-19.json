@@ -1,0 +1,643 @@
+{
+  "petclinic" : {
+    "head" : "500158f732419217507c7656904b8e6aa1bcc0d6",
+    "status" : "INSUFFICIENT_LABELS",
+    "reason" : "Only 25 bug-introducing commits in training and 5 in test (need 30 and 10)",
+    "fixes" : 54,
+    "tracedFixes" : 40,
+    "untraceableFixes" : 14,
+    "links" : 63,
+    "bugIntroducingCommits" : 41,
+    "datasetMs" : 791,
+    "szzMs" : 491,
+    "evaluation" : {
+      "samples" : 346,
+      "split" : {
+        "test" : 86,
+        "immature" : 18,
+        "warmup" : 34,
+        "train" : 208
+      },
+      "trainPeriod" : {
+        "from" : "2013-01-30T03:20:22Z",
+        "to" : "2022-08-22T10:59:52Z"
+      },
+      "testPeriod" : {
+        "from" : "2022-09-24T05:40:31Z",
+        "to" : "2026-03-11T07:09:31Z"
+      },
+      "trainPositives" : 25,
+      "testPositives" : 5,
+      "trainPositiveRate" : 0.1201923076923077,
+      "testPositiveRate" : 0.05813953488372093
+    },
+    "permutationCheckAuc" : 0.5896296296296295
+  },
+  "petclinic-rest" : {
+    "head" : "0515ec8b57e7708d99d7a1315638d81d3f2c9ead",
+    "status" : "INSUFFICIENT_LABELS",
+    "reason" : "Only 28 bug-introducing commits in training and 28 in test (need 30 and 10)",
+    "fixes" : 82,
+    "tracedFixes" : 65,
+    "untraceableFixes" : 17,
+    "links" : 137,
+    "bugIntroducingCommits" : 80,
+    "datasetMs" : 388,
+    "szzMs" : 654,
+    "evaluation" : {
+      "samples" : 346,
+      "split" : {
+        "test" : 86,
+        "immature" : 18,
+        "warmup" : 34,
+        "train" : 208
+      },
+      "trainPeriod" : {
+        "from" : "2013-01-30T03:20:22Z",
+        "to" : "2021-01-13T15:56:11Z"
+      },
+      "testPeriod" : {
+        "from" : "2021-02-06T14:52:20Z",
+        "to" : "2026-02-01T09:45:40Z"
+      },
+      "trainPositives" : 28,
+      "testPositives" : 28,
+      "trainPositiveRate" : 0.1346153846153846,
+      "testPositiveRate" : 0.32558139534883723
+    },
+    "permutationCheckAuc" : 0.5283251231527094
+  },
+  "commons-lang" : {
+    "head" : "5a1545b5f9a095f9a02725dcd0316800f237531e",
+    "status" : "ACCEPTED",
+    "reason" : "Test ROC-AUC 0.773 (churn baseline 0.729) on 814 later commits",
+    "fixes" : 339,
+    "tracedFixes" : 195,
+    "untraceableFixes" : 144,
+    "links" : 340,
+    "bugIntroducingCommits" : 238,
+    "datasetMs" : 7734,
+    "szzMs" : 68036,
+    "evaluation" : {
+      "samples" : 3256,
+      "split" : {
+        "test" : 814,
+        "immature" : 163,
+        "warmup" : 325,
+        "train" : 1954
+      },
+      "trainPeriod" : {
+        "from" : "2019-12-26T21:48:12Z",
+        "to" : "2025-08-30T11:52:55Z"
+      },
+      "testPeriod" : {
+        "from" : "2025-08-30T11:54:26Z",
+        "to" : "2026-09-15T16:56:17Z"
+      },
+      "trainPositives" : 102,
+      "testPositives" : 49,
+      "trainPositiveRate" : 0.052200614124872056,
+      "testPositiveRate" : 0.060196560196560195,
+      "model" : {
+        "auc" : 0.7728424703214619,
+        "brier" : 0.05335695471965838,
+        "ece" : 0.015337375538740143,
+        "threshold" : 0.19024299508216408,
+        "atThreshold" : {
+          "threshold" : 0.19024299508216408,
+          "tp" : 10,
+          "fp" : 21,
+          "fn" : 39,
+          "tn" : 744,
+          "precision" : 0.3225806451612903,
+          "recall" : 0.20408163265306123,
+          "f1" : 0.25000000000000006
+        },
+        "atHalf" : {
+          "threshold" : 0.5,
+          "tp" : 0,
+          "fp" : 0,
+          "fn" : 49,
+          "tn" : 765,
+          "precision" : 0.0,
+          "recall" : 0.0,
+          "f1" : 0.0
+        },
+        "calibration" : [ {
+          "lower" : 0.0,
+          "upper" : 0.1,
+          "count" : 708,
+          "meanPredicted" : 0.031692490141224945,
+          "observedRate" : 0.04519774011299435
+        }, {
+          "lower" : 0.1,
+          "upper" : 0.2,
+          "count" : 81,
+          "meanPredicted" : 0.13814839931090095,
+          "observedRate" : 0.12345679012345678
+        }, {
+          "lower" : 0.2,
+          "upper" : 0.3,
+          "count" : 15,
+          "meanPredicted" : 0.22674315853882662,
+          "observedRate" : 0.26666666666666666
+        }, {
+          "lower" : 0.3,
+          "upper" : 0.4,
+          "count" : 8,
+          "meanPredicted" : 0.343221824129394,
+          "observedRate" : 0.375
+        }, {
+          "lower" : 0.4,
+          "upper" : 0.5,
+          "count" : 2,
+          "meanPredicted" : 0.4399041677281561,
+          "observedRate" : 0.0
+        }, {
+          "lower" : 0.5,
+          "upper" : 0.6,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.6,
+          "upper" : 0.7,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.7,
+          "upper" : 0.8,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.8,
+          "upper" : 0.9,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.9,
+          "upper" : 1.0,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        } ],
+        "coefficients" : {
+          "type" : "logistic-regression-l2",
+          "lambda" : 1.0,
+          "intercept" : -3.4372586427658964,
+          "features" : [ {
+            "name" : "NS",
+            "std" : 1.0,
+            "coefficient" : -1.578041647601933E-28,
+            "mean" : 0.6931471805599565
+          }, {
+            "name" : "ND",
+            "std" : 0.36370199296555744,
+            "coefficient" : 0.0049983685419129125,
+            "mean" : 0.8795758239597367
+          }, {
+            "name" : "NF",
+            "std" : 0.6276128667568014,
+            "coefficient" : -0.006062343538307142,
+            "mean" : 1.008254529038513
+          }, {
+            "name" : "ENTROPY",
+            "std" : 0.29372814120972474,
+            "coefficient" : 0.169267529668739,
+            "mean" : 0.21348747453887304
+          }, {
+            "name" : "LA",
+            "std" : 1.6342799363411922,
+            "coefficient" : 0.6722472818504581,
+            "mean" : 2.442006505986395
+          }, {
+            "name" : "LD",
+            "std" : 1.5789653794768308,
+            "coefficient" : 0.29152298741301047,
+            "mean" : 1.9055636670940423
+          }, {
+            "name" : "LT",
+            "std" : 1.6820825190655408,
+            "coefficient" : -0.47125844709158626,
+            "mean" : 6.844979960487704
+          }, {
+            "name" : "FIX",
+            "std" : 0.19272943314170907,
+            "coefficient" : -0.05551884675847316,
+            "mean" : 0.058530851992011856
+          }, {
+            "name" : "NDEV",
+            "std" : 0.9881899976640377,
+            "coefficient" : 0.540790383237457,
+            "mean" : 1.8812990584170317
+          }, {
+            "name" : "AGE",
+            "std" : 2.196859031081029,
+            "coefficient" : 0.008396076983847395,
+            "mean" : 2.52202112386457
+          }, {
+            "name" : "NUC",
+            "std" : 1.1618650920692932,
+            "coefficient" : -0.16438093620314434,
+            "mean" : 3.185654524408444
+          }, {
+            "name" : "EXP",
+            "std" : 2.0545427567651657,
+            "coefficient" : -0.21288285943236368,
+            "mean" : 5.722196067553881
+          }, {
+            "name" : "REXP",
+            "std" : 1.8055289387642237,
+            "coefficient" : 0.0678174226748623,
+            "mean" : 5.065228798445548
+          }, {
+            "name" : "SEXP",
+            "std" : 2.0545427567651657,
+            "coefficient" : -0.21288285943236368,
+            "mean" : 5.722196067553881
+          } ],
+          "transform" : "log1p, then standardised with the training mean and deviation"
+        }
+      },
+      "churnBaseline" : {
+        "auc" : 0.7294251033746832,
+        "atThreshold" : {
+          "threshold" : 406.0,
+          "tp" : 6,
+          "fp" : 16,
+          "fn" : 43,
+          "tn" : 749,
+          "precision" : 0.2727272727272727,
+          "recall" : 0.12244897959183673,
+          "f1" : 0.16901408450704225
+        }
+      },
+      "priorBaseline" : {
+        "auc" : 0.5,
+        "rate" : 0.052200614124872056,
+        "brier" : 0.056636869490642915
+      }
+    },
+    "permutationCheckAuc" : 0.5163505402160865,
+    "examplePredictions" : [ {
+      "sha" : "5551df00882bc5e6a70ccc730cc321e527529bf7",
+      "time" : "2026-11-18T20:56:19Z",
+      "probability" : 0.12688794465909267,
+      "flagged" : false,
+      "drivers" : [ {
+        "value" : 80.0,
+        "contribution" : 0.8993059287490753,
+        "feature" : "LA"
+      }, {
+        "value" : 11.0,
+        "contribution" : 0.40068336652384173,
+        "feature" : "NDEV"
+      }, {
+        "value" : 103.0,
+        "contribution" : -0.3478410965696617,
+        "feature" : "NUC"
+      }, {
+        "value" : 0.9103480624345153,
+        "contribution" : 0.3451140737909562,
+        "feature" : "ENTROPY"
+      } ]
+    }, {
+      "sha" : "8702a433f0aff434b4c255eba0c27b54a33e6457",
+      "time" : "2026-11-18T19:14:19Z",
+      "probability" : 0.1013981720284722,
+      "flagged" : false,
+      "drivers" : [ {
+        "value" : 20.0,
+        "contribution" : 0.8139288355249551,
+        "feature" : "NDEV"
+      }, {
+        "value" : 34.0,
+        "contribution" : 0.5054894330343375,
+        "feature" : "LA"
+      }, {
+        "value" : 147.0,
+        "contribution" : -0.44266407332446295,
+        "feature" : "NUC"
+      }, {
+        "value" : 0.9681647320759548,
+        "contribution" : 0.36884738092109887,
+        "feature" : "ENTROPY"
+      } ]
+    }, {
+      "sha" : "5e4f4655e527d4a2665b21ab172cb29c9c2c9b4f",
+      "time" : "2026-11-18T18:37:31Z",
+      "probability" : 0.0362686938794486,
+      "flagged" : false,
+      "drivers" : [ {
+        "value" : 0.0,
+        "contribution" : -0.17011943229430357,
+        "feature" : "ENTROPY"
+      }, {
+        "value" : 481.0,
+        "contribution" : 0.1451516176164999,
+        "feature" : "LT"
+      }, {
+        "value" : 934.0954076339818,
+        "contribution" : 0.14004069209069972,
+        "feature" : "REXP"
+      }, {
+        "value" : 2398.0,
+        "contribution" : -0.13438470758172322,
+        "feature" : "EXP"
+      } ]
+    } ]
+  },
+  "guava" : {
+    "head" : "773f63124b3aaa65e7a13ba10a5d6c6d09920d83",
+    "status" : "NOT_BETTER_THAN_BASELINE",
+    "reason" : "Test ROC-AUC 0.801 does not beat the churn baseline (0.788) by 0.02",
+    "fixes" : 458,
+    "tracedFixes" : 241,
+    "untraceableFixes" : 217,
+    "links" : 534,
+    "bugIntroducingCommits" : 314,
+    "datasetMs" : 17905,
+    "szzMs" : 91731,
+    "evaluation" : {
+      "samples" : 4388,
+      "split" : {
+        "test" : 1097,
+        "immature" : 220,
+        "warmup" : 438,
+        "train" : 2633
+      },
+      "trainPeriod" : {
+        "from" : "2015-11-04T03:10:03Z",
+        "to" : "2023-04-17T12:41:04Z"
+      },
+      "testPeriod" : {
+        "from" : "2023-04-17T13:59:28Z",
+        "to" : "2026-06-04T19:59:20Z"
+      },
+      "trainPositives" : 141,
+      "testPositives" : 70,
+      "trainPositiveRate" : 0.05355108241549563,
+      "testPositiveRate" : 0.06381039197812215,
+      "model" : {
+        "auc" : 0.8006815968841285,
+        "brier" : 0.05627920967730789,
+        "ece" : 0.02750940613338522,
+        "threshold" : 0.23440172049739222,
+        "atThreshold" : {
+          "threshold" : 0.23440172049739222,
+          "tp" : 9,
+          "fp" : 29,
+          "fn" : 61,
+          "tn" : 998,
+          "precision" : 0.23684210526315788,
+          "recall" : 0.12857142857142856,
+          "f1" : 0.16666666666666666
+        },
+        "atHalf" : {
+          "threshold" : 0.5,
+          "tp" : 1,
+          "fp" : 0,
+          "fn" : 69,
+          "tn" : 1027,
+          "precision" : 1.0,
+          "recall" : 0.014285714285714285,
+          "f1" : 0.028169014084507043
+        },
+        "calibration" : [ {
+          "lower" : 0.0,
+          "upper" : 0.1,
+          "count" : 987,
+          "meanPredicted" : 0.022234918384948815,
+          "observedRate" : 0.047619047619047616
+        }, {
+          "lower" : 0.1,
+          "upper" : 0.2,
+          "count" : 64,
+          "meanPredicted" : 0.1407752359042276,
+          "observedRate" : 0.171875
+        }, {
+          "lower" : 0.2,
+          "upper" : 0.3,
+          "count" : 29,
+          "meanPredicted" : 0.24863614181303742,
+          "observedRate" : 0.20689655172413793
+        }, {
+          "lower" : 0.3,
+          "upper" : 0.4,
+          "count" : 13,
+          "meanPredicted" : 0.3651907365643535,
+          "observedRate" : 0.38461538461538464
+        }, {
+          "lower" : 0.4,
+          "upper" : 0.5,
+          "count" : 3,
+          "meanPredicted" : 0.44504087538832415,
+          "observedRate" : 0.0
+        }, {
+          "lower" : 0.5,
+          "upper" : 0.6,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.6,
+          "upper" : 0.7,
+          "count" : 1,
+          "meanPredicted" : 0.6647930912678255,
+          "observedRate" : 1.0
+        }, {
+          "lower" : 0.7,
+          "upper" : 0.8,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.8,
+          "upper" : 0.9,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        }, {
+          "lower" : 0.9,
+          "upper" : 1.0,
+          "count" : 0,
+          "meanPredicted" : "NaN",
+          "observedRate" : "NaN"
+        } ],
+        "coefficients" : {
+          "type" : "logistic-regression-l2",
+          "lambda" : 1.0,
+          "intercept" : -3.722962361294626,
+          "features" : [ {
+            "name" : "NS",
+            "std" : 0.26578380840189897,
+            "coefficient" : 0.13065885117317405,
+            "mean" : 1.043832201891687
+          }, {
+            "name" : "ND",
+            "std" : 0.466415606851118,
+            "coefficient" : -0.07448217506513992,
+            "mean" : 1.1610413890569817
+          }, {
+            "name" : "NF",
+            "std" : 0.8566336873755636,
+            "coefficient" : 0.07296830029568703,
+            "mean" : 1.5256796156453099
+          }, {
+            "name" : "ENTROPY",
+            "std" : 0.2608916665742321,
+            "coefficient" : 0.11527468724351565,
+            "mean" : 0.5214531406789522
+          }, {
+            "name" : "LA",
+            "std" : 1.8015877725148983,
+            "coefficient" : 1.0969828226324343,
+            "mean" : 3.0268901537893824
+          }, {
+            "name" : "LD",
+            "std" : 1.7969087101758412,
+            "coefficient" : 0.32592807739241325,
+            "mean" : 2.2915851909532883
+          }, {
+            "name" : "LT",
+            "std" : 1.5380712519553914,
+            "coefficient" : -0.030911573504575053,
+            "mean" : 7.117514744067439
+          }, {
+            "name" : "FIX",
+            "std" : 0.2163427118843714,
+            "coefficient" : 0.04786911781399029,
+            "mean" : 0.07581708621392472
+          }, {
+            "name" : "NDEV",
+            "std" : 0.873756482029203,
+            "coefficient" : -0.1629806304897802,
+            "mean" : 2.034595141611272
+          }, {
+            "name" : "AGE",
+            "std" : 1.9417654474360755,
+            "coefficient" : -0.26745721685528284,
+            "mean" : 3.613965652851902
+          }, {
+            "name" : "NUC",
+            "std" : 1.1271633548208215,
+            "coefficient" : 0.12306212694741346,
+            "mean" : 3.069779059844376
+          }, {
+            "name" : "EXP",
+            "std" : 2.040702495298231,
+            "coefficient" : -1.3124526072519531,
+            "mean" : 3.666529620996037
+          }, {
+            "name" : "REXP",
+            "std" : 1.744624011130313,
+            "coefficient" : 1.0675419192906095,
+            "mean" : 3.1182971130155552
+          }, {
+            "name" : "SEXP",
+            "std" : 1.9222299952099249,
+            "coefficient" : -0.12312912250742954,
+            "mean" : 3.3835634402181802
+          } ],
+          "transform" : "log1p, then standardised with the training mean and deviation"
+        }
+      },
+      "churnBaseline" : {
+        "auc" : 0.7880442342467658,
+        "atThreshold" : {
+          "threshold" : 503.0,
+          "tp" : 23,
+          "fp" : 92,
+          "fn" : 47,
+          "tn" : 935,
+          "precision" : 0.2,
+          "recall" : 0.32857142857142857,
+          "f1" : 0.24864864864864863
+        }
+      },
+      "priorBaseline" : {
+        "auc" : 0.5,
+        "rate" : 0.05355108241549563,
+        "brier" : 0.059843879286423006
+      }
+    },
+    "permutationCheckAuc" : 0.5157713172903046
+  },
+  "crossRepository" : {
+    "petclinic -> petclinic-rest" : {
+      "f1" : 0.5483870967741935,
+      "churnAuc" : 0.6899630541871922,
+      "brier" : 0.21129480530397193,
+      "auc" : 0.7481527093596059
+    },
+    "petclinic -> commons-lang" : {
+      "f1" : 0.21256038647342995,
+      "churnAuc" : 0.7294251033746832,
+      "brier" : 0.06591272292019645,
+      "auc" : 0.7475256769374417
+    },
+    "petclinic -> guava" : {
+      "f1" : 0.23214285714285715,
+      "churnAuc" : 0.7880442342467658,
+      "brier" : 0.0723116157789,
+      "auc" : 0.7344136875782445
+    },
+    "petclinic-rest -> petclinic" : {
+      "f1" : 0.16000000000000003,
+      "churnAuc" : 0.7839506172839507,
+      "brier" : 0.07497509321759555,
+      "auc" : 0.745679012345679
+    },
+    "petclinic-rest -> commons-lang" : {
+      "f1" : 0.18937644341801385,
+      "churnAuc" : 0.7294251033746832,
+      "brier" : 0.1298736992211195,
+      "auc" : 0.7754301720688276
+    },
+    "petclinic-rest -> guava" : {
+      "f1" : 0.19119878603945373,
+      "churnAuc" : 0.7880442342467658,
+      "brier" : 0.135051471881499,
+      "auc" : 0.8070663513701488
+    },
+    "commons-lang -> petclinic" : {
+      "f1" : 0.1818181818181818,
+      "churnAuc" : 0.7839506172839507,
+      "brier" : 0.06307533044732971,
+      "auc" : 0.7950617283950617
+    },
+    "commons-lang -> petclinic-rest" : {
+      "f1" : 0.48979591836734687,
+      "churnAuc" : 0.6899630541871922,
+      "brier" : 0.2251959729438378,
+      "auc" : 0.7346059113300493
+    },
+    "commons-lang -> guava" : {
+      "f1" : 0.29927007299270075,
+      "churnAuc" : 0.7880442342467658,
+      "brier" : 0.062489055765839414,
+      "auc" : 0.8003477535123105
+    },
+    "guava -> petclinic" : {
+      "f1" : 0.0,
+      "churnAuc" : 0.7839506172839507,
+      "brier" : 0.05448918049368483,
+      "auc" : 0.8049382716049382
+    },
+    "guava -> petclinic-rest" : {
+      "f1" : 0.125,
+      "churnAuc" : 0.6899630541871922,
+      "brier" : 0.27580791460800436,
+      "auc" : 0.7444581280788177
+    },
+    "guava -> commons-lang" : {
+      "f1" : 0.15873015873015872,
+      "churnAuc" : 0.7294251033746832,
+      "brier" : 0.05395085654202067,
+      "auc" : 0.7778044551153794
+    }
+  }
+}

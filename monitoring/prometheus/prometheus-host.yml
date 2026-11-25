@@ -1,0 +1,21 @@
+# Prometheus for a backend started on the Docker host (development): host.docker.internal:8080.
+# The full stack uses prometheus.yml (target backend:8080).
+global:
+  scrape_interval: 15s
+  evaluation_interval: 30s
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+scrape_configs:
+  - job_name: changeimpact-backend
+    metrics_path: /actuator/prometheus
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/metrics_scrape_token   # = METRICS_SCRAPE_TOKEN of the backend
+    static_configs:
+      - targets: ["host.docker.internal:8080"]
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

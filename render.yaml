@@ -1,0 +1,46 @@
+services:
+  # ----------------------------------------------------
+  # ChangeImpact AI Backend (Spring Boot 4 on Java 21)
+  # ----------------------------------------------------
+  - type: web
+    name: changeimpact-backend
+    env: docker
+    plan: free
+    dockerfilePath: backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: APP_PROFILE
+        value: dev
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx384m -Xms128m -XX:+UseG1GC
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres?sslmode=require
+      - key: DB_USERNAME
+        value: postgres.izplzogbtslguegdgjzm
+      - key: DB_PASSWORD
+        sync: false
+      - key: RABBITMQ_HOST
+        value: localhost
+      - key: REDIS_HOST
+        value: localhost
+
+  # ----------------------------------------------------
+  # ChangeImpact AI Frontend (React + Vite SPA)
+  # ----------------------------------------------------
+  - type: web
+    name: changeimpact-frontend
+    env: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://changeimpact-backend.onrender.com/api/v1

@@ -1,0 +1,57 @@
+# ============================================================
+# Production profile (APP_PROFILE=prod)
+# Secrets have NO defaults here: startup fails if they are missing,
+# and ProductionSafetyCheck rejects known development defaults.
+# ============================================================
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:changeimpact}}}
+    username: ${DB_USERNAME:${SPRING_DATASOURCE_USERNAME:postgres}}
+    password: ${DB_PASSWORD:${SPRING_DATASOURCE_PASSWORD:}}
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+server:
+  # behind a TLS-terminating reverse proxy: trust X-Forwarded-* only from it
+  forward-headers-strategy: ${FORWARD_HEADERS_STRATEGY:native}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+springdoc:
+  swagger-ui:
+    enabled: ${SWAGGER_UI_ENABLED:false}
+  api-docs:
+    enabled: ${API_DOCS_ENABLED:false}
+
+management:
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:0.1}
+
+logging:
+  level:
+    com.changeimpact: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN
+    org.springframework.security: WARN
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      access-token-expiry-ms: ${JWT_ACCESS_EXPIRY_MS:900000}      # 15 minutes
+    bcrypt:
+      strength: ${BCRYPT_STRENGTH:12}
+    allowed-origins:
+      - ${FRONTEND_URL}

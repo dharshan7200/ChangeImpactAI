@@ -1,0 +1,393 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "queries": 25,
+ "summary": {
+  "fts": {
+   "hit@1": 0.12,
+   "hit@5": 0.48,
+   "mrr@10": 0.258,
+   "medianMs": 12
+  },
+  "vector": {
+   "hit@1": 0.92,
+   "hit@5": 1.0,
+   "mrr@10": 0.96,
+   "medianMs": 382
+  },
+  "hybrid": {
+   "hit@1": 0.4,
+   "hit@5": 0.8,
+   "mrr@10": 0.572,
+   "medianMs": 121
+  },
+  "auto": {
+   "hit@1": 0.92,
+   "hit@5": 1.0,
+   "mrr@10": 0.96,
+   "medianMs": 38
+  },
+  "rrf_w0.25": {
+   "hit@1": 0.68,
+   "hit@5": 1.0,
+   "mrr@10": 0.823
+  },
+  "rrf_w0.5": {
+   "hit@1": 0.52,
+   "hit@5": 0.96,
+   "mrr@10": 0.713
+  }
+ },
+ "fallbacks": [],
+ "perQuery": [
+  {
+   "q": "strip the Authorization header when redirected to a different host",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 7,
+   "auto": 1,
+   "rrf_w0.25": 3,
+   "rrf_w0.5": 3,
+   "vectorTop3": [
+    "sessions.SessionRedirectMixin#rebuild_auth",
+    "sessions.SessionRedirectMixin#should_strip_auth",
+    "tests.test_requests.TestRequests#test_auth_is_stripped_on_http_downgrade"
+   ]
+  },
+  {
+   "q": "raise an exception for 4xx or 5xx responses",
+   "fts": 4,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.Response#raise_for_status",
+    "tests.test_requests.TestRequests#test_status_raising",
+    "exceptions"
+   ]
+  },
+  {
+   "q": "decide whether a URL should bypass the proxy",
+   "fts": 10,
+   "vector": 1,
+   "hybrid": 4,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "utils#should_bypass_proxies",
+    "tests.test_utils#test_should_bypass_proxies",
+    "tests.test_utils#test_should_bypass_proxies_win_registry"
+   ]
+  },
+  {
+   "q": "read credentials from the netrc file",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 4,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 3,
+   "vectorTop3": [
+    "utils#get_netrc_auth",
+    "tests.test_utils.TestGetNetrcAuth#test_works",
+    "tests.test_utils.TestGetNetrcAuth"
+   ]
+  },
+  {
+   "q": "compute the digest authentication header",
+   "fts": 2,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "auth.HTTPDigestAuth#build_digest_header",
+    "auth.HTTPDigestAuth#__call__",
+    "auth.HTTPDigestAuth"
+   ]
+  },
+  {
+   "q": "retry the request after a 401 challenge with digest auth",
+   "fts": 3,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "auth.HTTPDigestAuth#handle_401",
+    "tests.test_lowlevel#test_digestauth_401_only_sent_once",
+    "auth.HTTPDigestAuth#__call__"
+   ]
+  },
+  {
+   "q": "encode a username and password for basic auth",
+   "fts": 6,
+   "vector": 1,
+   "hybrid": 2,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "auth#_basic_auth_str",
+    "tests.test_requests.TestRequests#test_basic_auth_str_is_always_native",
+    "auth.HTTPBasicAuth"
+   ]
+  },
+  {
+   "q": "follow redirects up to a maximum number",
+   "fts": 5,
+   "vector": 1,
+   "hybrid": 3,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "sessions.SessionRedirectMixin#resolve_redirects",
+    "tests.test_requests.TestRequests#test_HTTP_302_TOO_MANY_REDIRECTS_WITH_PARAMS",
+    "exceptions.TooManyRedirects"
+   ]
+  },
+  {
+   "q": "change POST to GET after a 303 redirect",
+   "fts": null,
+   "vector": 2,
+   "hybrid": 10,
+   "auto": 2,
+   "rrf_w0.25": 4,
+   "rrf_w0.5": 6,
+   "vectorTop3": [
+    "tests.test_requests.TestRequests#test_http_303_changes_post_to_get",
+    "sessions.SessionRedirectMixin#rebuild_method",
+    "tests.test_requests#test_requests_are_updated_each_time"
+   ]
+  },
+  {
+   "q": "merge session settings with per-request settings",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "sessions#merge_setting",
+    "sessions.Session#merge_environment_settings",
+    "sessions#merge_hooks"
+   ]
+  },
+  {
+   "q": "iterate over the response body in chunks",
+   "fts": 8,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.Response#iter_content",
+    "models.Response#iter_content",
+    "models.Response#iter_content"
+   ]
+  },
+  {
+   "q": "decode the response body as JSON",
+   "fts": 8,
+   "vector": 1,
+   "hybrid": 3,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "models.Response#json",
+    "tests.test_requests.TestPreparingURLs#test_json_decode_compatibility",
+    "tests.test_lowlevel#test_json_decode_compatibility_for_alt_utf_encodings"
+   ]
+  },
+  {
+   "q": "guess the text encoding of the response",
+   "fts": 3,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.Response#apparent_encoding",
+    "utils#guess_json_utf",
+    "utils#get_encoding_from_headers"
+   ]
+  },
+  {
+   "q": "encode multipart file uploads",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 6,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "models.RequestEncodingMixin#_encode_files",
+    "models.RequestEncodingMixin#_encode_params",
+    "tests.test_requests.TestRequests#test_different_encodings_dont_break_post"
+   ]
+  },
+  {
+   "q": "validate and normalise the request URL",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 4,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "models.PreparedRequest#prepare_url",
+    "tests.test_requests.TestPreparingURLs",
+    "tests.test_requests.TestPreparingURLs#test_preparing_url"
+   ]
+  },
+  {
+   "q": "set the Content-Length header",
+   "fts": 8,
+   "vector": 1,
+   "hybrid": 3,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.PreparedRequest#prepare_content_length",
+    "tests.test_requests.TestRequests#test_override_content_length",
+    "tests.test_requests.TestRequests#test_autoset_header_values_are_native"
+   ]
+  },
+  {
+   "q": "mount a transport adapter for a URL prefix",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 7,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 4,
+   "vectorTop3": [
+    "sessions.Session#mount",
+    "tests.test_requests.TestRequests#test_session_get_adapter_prefix_matching",
+    "tests.test_requests.TestRequests#test_transport_adapter_ordering"
+   ]
+  },
+  {
+   "q": "verify TLS certificates",
+   "fts": 5,
+   "vector": 1,
+   "hybrid": 2,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "adapters.HTTPAdapter#cert_verify",
+    "tests.testserver.server.TLSServer",
+    "tests.test_requests.TestPreparingURLs#test_different_connection_pool_for_tls_settings_verify_bundle_unexpired_cert"
+   ]
+  },
+  {
+   "q": "convert a cookie jar to a dictionary",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 2,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#dict_from_cookiejar",
+    "cookies.RequestsCookieJar#get_dict",
+    "utils#add_dict_to_cookiejar"
+   ]
+  },
+  {
+   "q": "parse Link headers",
+   "fts": 4,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#parse_header_links",
+    "tests.test_utils#test_parse_header_links",
+    "models.Response#links"
+   ]
+  },
+  {
+   "q": "add proxy authentication headers",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "auth.HTTPProxyAuth#__call__",
+    "auth.HTTPProxyAuth",
+    "adapters.HTTPAdapter#proxy_headers"
+   ]
+  },
+  {
+   "q": "requote a URI keeping unreserved characters",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#requote_uri",
+    "tests.test_utils#test_unquote_unreserved",
+    "utils#unquote_unreserved"
+   ]
+  },
+  {
+   "q": "connection pool manager for each proxy",
+   "fts": 2,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "adapters.HTTPAdapter#proxy_manager_for",
+    "adapters.HTTPAdapter#init_poolmanager",
+    "adapters.HTTPAdapter#__setstate__"
+   ]
+  },
+  {
+   "q": "send a GET request",
+   "fts": null,
+   "vector": 1,
+   "hybrid": 6,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 4,
+   "vectorTop3": [
+    "api#get",
+    "sessions.Session#get",
+    "tests.test_requests.TestRequests#test_HTTP_200_OK_GET_WITH_PARAMS"
+   ]
+  },
+  {
+   "q": "rewind the body of a request before resending it",
+   "fts": 4,
+   "vector": 2,
+   "hybrid": 3,
+   "auto": 2,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "tests.test_requests.TestRequests#test_rewind_body",
+    "utils#rewind_body",
+    "tests.test_requests.TestRequests#test_rewind_partially_read_body"
+   ]
+  }
+ ]
+}

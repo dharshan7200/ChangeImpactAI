@@ -1,0 +1,37 @@
+# ============================================================
+# Dev profile overrides
+# ============================================================
+spring:
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:your-gemini-api-key-here}
+        embedding:
+          api-key: ${GEMINI_API_KEY:your-gemini-api-key-here}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.changeimpact: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    # SQL bind values are never logged (they include token hashes and encrypted credentials)
+    org.hibernate.orm.jdbc.bind: INFO
+
+app:
+  security:
+    jwt:
+      secret: dev-only-secret-key-not-for-production-must-be-32-chars
+    bcrypt:
+      strength: 4   # Faster in dev; use 12 in prod
+    allowed-origins:
+      - http://localhost:5173
+      - http://localhost:3000
+      - https://roberts-writer-hudson-interest.trycloudflare.com
+      - https://changeimpactai.loca.lt
+      - https://changeimpact-ai.loca.lt
+

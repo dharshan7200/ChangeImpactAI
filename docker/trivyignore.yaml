@@ -1,0 +1,10 @@
+# Accepted image-scan findings. Each entry: why it does not apply, and when to re-check (Trivy stops ignoring it then).
+# Use: trivy image --ignorefile docker/trivyignore.yaml changeimpact-backend:latest
+vulnerabilities:
+  - id: CVE-2026-115563
+    # mcp 1.29.0, pinned exactly by every Semgrep release up to 1.186.0 (Nov 2026), so it cannot be upgraded.
+    # The flaw is in the MCP *OAuth client* providers (mcp.client.auth), which can send credentials to an
+    # authorization server chosen by an untrusted MCP server. The platform runs only `semgrep scan` (offline,
+    # --metrics=off); it never runs `semgrep mcp` or any MCP client, and no OAuth credentials exist in the image.
+    statement: "Not reachable: only `semgrep scan` is executed; no MCP client/OAuth code path. Pinned by Semgrep."
+    expired_at: 2027-02-28

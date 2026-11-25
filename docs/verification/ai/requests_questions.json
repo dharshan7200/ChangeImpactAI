@@ -1,0 +1,170 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "prefix": "requests.",
+ "note": "Held-out set (psf/requests, Python), written from the source after the full-text change and before any search on this repository.",
+ "queries": [
+  {
+   "q": "strip the Authorization header when redirected to a different host",
+   "relevant": [
+    "sessions.SessionRedirectMixin#rebuild_auth",
+    "sessions.SessionRedirectMixin#should_strip_auth"
+   ]
+  },
+  {
+   "q": "raise an exception for 4xx or 5xx responses",
+   "relevant": [
+    "models.Response#raise_for_status"
+   ]
+  },
+  {
+   "q": "decide whether a URL should bypass the proxy",
+   "relevant": [
+    "utils#should_bypass_proxies",
+    "utils#get_environ_proxies"
+   ]
+  },
+  {
+   "q": "read credentials from the netrc file",
+   "relevant": [
+    "utils#get_netrc_auth"
+   ]
+  },
+  {
+   "q": "compute the digest authentication header",
+   "relevant": [
+    "auth.HTTPDigestAuth#build_digest_header"
+   ]
+  },
+  {
+   "q": "retry the request after a 401 challenge with digest auth",
+   "relevant": [
+    "auth.HTTPDigestAuth#handle_401"
+   ]
+  },
+  {
+   "q": "encode a username and password for basic auth",
+   "relevant": [
+    "auth#_basic_auth_str",
+    "auth.HTTPBasicAuth#__call__"
+   ]
+  },
+  {
+   "q": "follow redirects up to a maximum number",
+   "relevant": [
+    "sessions.SessionRedirectMixin#resolve_redirects"
+   ]
+  },
+  {
+   "q": "change POST to GET after a 303 redirect",
+   "relevant": [
+    "sessions.SessionRedirectMixin#rebuild_method"
+   ]
+  },
+  {
+   "q": "merge session settings with per-request settings",
+   "relevant": [
+    "sessions#merge_setting",
+    "sessions#merge_hooks",
+    "sessions.Session#merge_environment_settings"
+   ]
+  },
+  {
+   "q": "iterate over the response body in chunks",
+   "relevant": [
+    "models.Response#iter_content"
+   ]
+  },
+  {
+   "q": "decode the response body as JSON",
+   "relevant": [
+    "models.Response#json"
+   ]
+  },
+  {
+   "q": "guess the text encoding of the response",
+   "relevant": [
+    "models.Response#apparent_encoding",
+    "models.Response#text",
+    "utils#get_encoding_from_headers"
+   ]
+  },
+  {
+   "q": "encode multipart file uploads",
+   "relevant": [
+    "models.RequestEncodingMixin#_encode_files"
+   ]
+  },
+  {
+   "q": "validate and normalise the request URL",
+   "relevant": [
+    "models.PreparedRequest#prepare_url"
+   ]
+  },
+  {
+   "q": "set the Content-Length header",
+   "relevant": [
+    "models.PreparedRequest#prepare_content_length"
+   ]
+  },
+  {
+   "q": "mount a transport adapter for a URL prefix",
+   "relevant": [
+    "sessions.Session#mount",
+    "sessions.Session#get_adapter"
+   ]
+  },
+  {
+   "q": "verify TLS certificates",
+   "relevant": [
+    "adapters.HTTPAdapter#cert_verify"
+   ]
+  },
+  {
+   "q": "convert a cookie jar to a dictionary",
+   "relevant": [
+    "utils#dict_from_cookiejar",
+    "cookies.RequestsCookieJar#get_dict"
+   ]
+  },
+  {
+   "q": "parse Link headers",
+   "relevant": [
+    "utils#parse_header_links",
+    "models.Response#links"
+   ]
+  },
+  {
+   "q": "add proxy authentication headers",
+   "relevant": [
+    "adapters.HTTPAdapter#proxy_headers",
+    "auth.HTTPProxyAuth#__call__",
+    "sessions.SessionRedirectMixin#rebuild_proxies"
+   ]
+  },
+  {
+   "q": "requote a URI keeping unreserved characters",
+   "relevant": [
+    "utils#requote_uri",
+    "utils#unquote_unreserved"
+   ]
+  },
+  {
+   "q": "connection pool manager for each proxy",
+   "relevant": [
+    "adapters.HTTPAdapter#proxy_manager_for"
+   ]
+  },
+  {
+   "q": "send a GET request",
+   "relevant": [
+    "api#get"
+   ]
+  },
+  {
+   "q": "rewind the body of a request before resending it",
+   "relevant": [
+    "utils#rewind_body"
+   ]
+  }
+ ]
+}

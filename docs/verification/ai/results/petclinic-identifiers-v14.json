@@ -1,0 +1,564 @@
+{
+ "modes": {
+  "fts": {
+   "hit@1": 0.75,
+   "hit@5": 1.0,
+   "mrr@10": 0.854,
+   "medianMs": 12
+  },
+  "vector": {
+   "hit@1": 0.95,
+   "hit@5": 1.0,
+   "mrr@10": 0.975,
+   "medianMs": 250
+  },
+  "hybrid": {
+   "hit@1": 0.95,
+   "hit@5": 1.0,
+   "mrr@10": 0.975,
+   "medianMs": 256
+  }
+ },
+ "perQuery": [
+  {
+   "q": "findByLastNameStartingWith",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()",
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "owner.OwnerRepository",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()",
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)"
+    ]
+   }
+  },
+  {
+   "q": "PetValidator",
+   "fts": {
+    "firstRelevantRank": 3,
+    "top3": [
+     "owner.PetValidatorTests#supportsPetClass()",
+     "owner.PetValidatorTests#doesNotSupportNonPetClass()",
+     "owner.PetValidator#supports(Class)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetValidator",
+     "owner.PetValidator#validate(Object,Errors)",
+     "owner.PetValidator#supports(Class)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.PetValidatorTests#supportsPetClass()",
+     "owner.PetValidator#supports(Class)",
+     "owner.PetValidatorTests#doesNotSupportNonPetClass()"
+    ]
+   }
+  },
+  {
+   "q": "triggerException",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.CrashController#triggerException()",
+     "system.CrashControllerTests#triggerException()",
+     "system.CrashControllerIntegrationTests#triggerExceptionJson()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.CrashController#triggerException()",
+     "system.CrashControllerTests#triggerException()",
+     "system.CrashController"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.CrashController#triggerException()",
+     "system.CrashControllerTests#triggerException()",
+     "system.CrashControllerIntegrationTests#triggerExceptionJson()"
+    ]
+   }
+  },
+  {
+   "q": "isDuplicatePetNameViolation",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithDuplicateName()",
+     "owner.PetControllerTests$ProcessUpdateFormHasErrors#processUpdateFormWithDuplicateName()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)",
+     "service.ClinicServiceTests#shouldFailToInsertDuplicatePetNameForSameOwner()",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithDataIntegrityViolation()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#isDuplicatePetNameViolation(DataIntegrityViolationException)",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#processCreationFormWithDuplicateName()",
+     "service.ClinicServiceTests#shouldFailToInsertDuplicatePetNameForSameOwner()"
+    ]
+   }
+  },
+  {
+   "q": "getNrOfSpecialties",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet#getSpecialties()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet"
+    ]
+   }
+  },
+  {
+   "q": "localeChangeInterceptor",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration#localeChangeInterceptor()",
+     "system.WebConfiguration#addInterceptors(InterceptorRegistry)",
+     "system.WebConfiguration#localeResolver()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration#localeChangeInterceptor()",
+     "system.WebConfiguration#addInterceptors(InterceptorRegistry)",
+     "system.WebConfiguration"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "system.WebConfiguration#localeChangeInterceptor()",
+     "system.WebConfiguration#addInterceptors(InterceptorRegistry)",
+     "system.WebConfiguration#localeResolver()"
+    ]
+   }
+  },
+  {
+   "q": "findPetTypes",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeRepository#findPetTypes()",
+     "owner.PetController#populatePetTypes()",
+     "service.ClinicServiceTests#shouldFindAllPetTypes()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "service.ClinicServiceTests#shouldFindAllPetTypes()",
+     "owner.PetTypeRepository#findPetTypes()",
+     "owner.PetController#populatePetTypes()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeRepository#findPetTypes()",
+     "service.ClinicServiceTests#shouldFindAllPetTypes()",
+     "owner.PetController#populatePetTypes()"
+    ]
+   }
+  },
+  {
+   "q": "addPaginationModel",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#addPaginationModel(int,Model,Page)",
+     "vet.VetController#addPaginationModel(int,Page,Model)",
+     "model.BaseEntity#getId()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#addPaginationModel(int,Model,Page)",
+     "vet.VetController#addPaginationModel(int,Page,Model)",
+     "vet.VetController"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#addPaginationModel(int,Model,Page)",
+     "vet.VetController#addPaginationModel(int,Page,Model)",
+     "vet.VetController#showVetList(int,Model,RedirectAttributes)"
+    ]
+   }
+  },
+  {
+   "q": "minVisitDate",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#minVisitDate()",
+     "owner.Visit#setDate(LocalDate)",
+     "owner.Visit#getDate()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#minVisitDate()",
+     "owner.Visit",
+     "owner.Visit#<init>()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#minVisitDate()",
+     "owner.Visit#getDate()",
+     "owner.Visit#setDate(LocalDate)"
+    ]
+   }
+  },
+  {
+   "q": "registerHints",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicRuntimeHints",
+     "PetClinicApplication"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicRuntimeHints",
+     "PetClinicApplication"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "PetClinicRuntimeHints#registerHints(RuntimeHints,ClassLoader)",
+     "PetClinicRuntimeHints",
+     "PetClinicApplication"
+    ]
+   }
+  },
+  {
+   "q": "PetTypeFormatter parse",
+   "fts": {
+    "firstRelevantRank": 4,
+    "top3": [
+     "owner.PetTypeFormatter#<init>(PetTypeRepository)",
+     "owner.PetTypeFormatterTests#shouldThrowParseException()",
+     "owner.PetTypeFormatterTests#shouldParse()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeFormatter#parse(String,Locale)",
+     "owner.PetTypeFormatter",
+     "owner.PetTypeFormatterTests#shouldParse()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetTypeFormatter#parse(String,Locale)",
+     "owner.PetTypeFormatterTests#shouldParse()",
+     "owner.PetTypeFormatter#<init>(PetTypeRepository)"
+    ]
+   }
+  },
+  {
+   "q": "setAllowedFields",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#setAllowedFields(WebDataBinder)",
+     "owner.VisitController#setAllowedFields(WebDataBinder)",
+     "owner.VisitController"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#setAllowedFields(WebDataBinder)",
+     "owner.VisitController#setAllowedFields(WebDataBinder)",
+     "owner.PetController#initOwnerBinder(WebDataBinder)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#setAllowedFields(WebDataBinder)",
+     "owner.VisitController#setAllowedFields(WebDataBinder)",
+     "owner.PetController#initOwnerBinder(WebDataBinder)"
+    ]
+   }
+  },
+  {
+   "q": "loadPetWithVisit",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.Pet#addVisit(Visit)",
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "service.ClinicServiceTests#shouldAddNewVisitForPet()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.VisitController",
+     "owner.Pet#getVisits()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#loadPetWithVisit(int,int,Map)",
+     "owner.Pet#addVisit(Visit)",
+     "owner.Pet#getVisits()"
+    ]
+   }
+  },
+  {
+   "q": "showResourcesVetList",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "vet.VetControllerTests#showResourcesVetList()",
+     "vet.VetController#showResourcesVetList()",
+     "vet.VetControllerTests#showVetListHtml()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetController#showResourcesVetList()",
+     "vet.VetControllerTests#showResourcesVetList()",
+     "vet.Vets"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.VetController#showResourcesVetList()",
+     "vet.VetControllerTests#showResourcesVetList()",
+     "vet.VetControllerTests#showVetListHtml()"
+    ]
+   }
+  },
+  {
+   "q": "updatePetDetails",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.PetController#initUpdateForm()",
+     "PetClinicIntegrationTests#ownerDetails()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.PetController#processUpdateForm(Owner,Pet,BindingResult,RedirectAttributes)",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#initUpdateForm()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.PetController#updatePetDetails(Owner,Pet)",
+     "owner.PetControllerTests$ProcessCreationFormHasErrors#initUpdateForm()",
+     "owner.PetController#initUpdateForm()"
+    ]
+   }
+  },
+  {
+   "q": "getSpecialtiesInternal",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialties()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet#getSpecialties()",
+     "vet.Vet#getNrOfSpecialties()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "vet.Vet#getSpecialtiesInternal()",
+     "vet.Vet#getNrOfSpecialties()",
+     "vet.Vet#getSpecialties()"
+    ]
+   }
+  },
+  {
+   "q": "Owner.addVisit",
+   "fts": {
+    "firstRelevantRank": 2,
+    "top3": [
+     "owner.Pet#addVisit(Visit)",
+     "owner.Owner#addVisit(Integer,Visit)",
+     "owner.VisitController#<init>(OwnerRepository)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.Owner#addVisit(Integer,Visit)",
+     "owner.Pet#addVisit(Visit)",
+     "owner.VisitController#processNewVisitForm(Owner,int,Visit,BindingResult,RedirectAttributes)"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.Owner#addVisit(Integer,Visit)",
+     "owner.Pet#addVisit(Visit)",
+     "owner.VisitController#<init>(OwnerRepository)"
+    ]
+   }
+  },
+  {
+   "q": "initNewVisitForm",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#initNewVisitForm()",
+     "owner.VisitControllerTests#initNewVisitForm()",
+     "owner.VisitControllerTests#processNewVisitFormHasErrors()"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#initNewVisitForm()",
+     "owner.VisitControllerTests#initNewVisitForm()",
+     "owner.VisitController"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.VisitController#initNewVisitForm()",
+     "owner.VisitControllerTests#initNewVisitForm()",
+     "owner.VisitControllerTests#processNewVisitFormHasErrors()"
+    ]
+   }
+  },
+  {
+   "q": "findPaginatedForOwnersLastName",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()",
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)",
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "owner.OwnerRepository"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "owner.OwnerController#findPaginatedForOwnersLastName(int,String)",
+     "owner.OwnerRepository#findByLastNameStartingWith(String,Pageable)",
+     "service.ClinicServiceTests#shouldFindOwnersByLastName()"
+    ]
+   }
+  },
+  {
+   "q": "BaseEntity isNew",
+   "fts": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "model.BaseEntity#isNew()",
+     "model.BaseEntity#getId()",
+     "model.BaseEntity#setId(Integer)"
+    ]
+   },
+   "vector": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "model.BaseEntity#isNew()",
+     "model.BaseEntity",
+     "model.BaseEntity#getId()"
+    ]
+   },
+   "hybrid": {
+    "firstRelevantRank": 1,
+    "top3": [
+     "model.BaseEntity#isNew()",
+     "model.BaseEntity#getId()",
+     "model.BaseEntity"
+    ]
+   }
+  }
+ ]
+}

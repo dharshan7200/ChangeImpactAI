@@ -1,0 +1,590 @@
+[
+ {
+  "area": "Web tier",
+  "feature": "nginx health endpoint",
+  "result": "PASS",
+  "evidence": "200 b'ok'"
+ },
+ {
+  "area": "Web tier",
+  "feature": "security headers on the SPA",
+  "result": "PASS",
+  "evidence": "{'x-frame-options': 'DENY', 'x-content-type-options': 'nosniff', 'referrer-policy': 'strict-origin-when-cross-origin'}"
+ },
+ {
+  "area": "Web tier",
+  "feature": "SPA deep link served (no-cache)",
+  "result": "PASS",
+  "evidence": "200 no-cache"
+ },
+ {
+  "area": "Web tier",
+  "feature": "actuator not exposed through the web port",
+  "result": "PASS",
+  "evidence": "200 returns SPA page"
+ },
+ {
+  "area": "Auth",
+  "feature": "register (admin e-mail)",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Auth",
+  "feature": "register second user",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Auth",
+  "feature": "duplicate e-mail refused",
+  "result": "PASS",
+  "evidence": "400 {'code': 'DUPLICATE_EMAIL', 'message': 'An account with this email already exists', 'success': False, 'timestamp': '2026-11-21T18:15:29.455794090Z'}"
+ },
+ {
+  "area": "Auth",
+  "feature": "weak password refused",
+  "result": "PASS",
+  "evidence": "400"
+ },
+ {
+  "area": "Auth",
+  "feature": "login returns access + refresh token",
+  "result": "PASS",
+  "evidence": "200"
+ },
+ {
+  "area": "Auth",
+  "feature": "wrong password \u2192 401",
+  "result": "PASS",
+  "evidence": "401"
+ },
+ {
+  "area": "Auth",
+  "feature": "refresh token rotation",
+  "result": "PASS",
+  "evidence": "200"
+ },
+ {
+  "area": "Auth",
+  "feature": "API without token \u2192 401",
+  "result": "PASS",
+  "evidence": "401"
+ },
+ {
+  "area": "Auth",
+  "feature": "forged JWT \u2192 401",
+  "result": "PASS",
+  "evidence": "401"
+ },
+ {
+  "area": "Repositories",
+  "feature": "connect public repository (Java)",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Repositories",
+  "feature": "connect public repository (Python)",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Repositories",
+  "feature": "connect third repository",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Repositories",
+  "feature": "connect large repository (commons-lang)",
+  "result": "PASS",
+  "evidence": "201"
+ },
+ {
+  "area": "Repositories",
+  "feature": "non-existent repository refused",
+  "result": "PASS",
+  "evidence": "400 REPOSITORY_NOT_FOUND: GitHub repository this-owner-does-not-exist-9x/nothing-here was not found or is private; check the name or connect a GitHub account that can read it"
+ },
+ {
+  "area": "Repositories",
+  "feature": "non-GitHub URL refused (input validation)",
+  "result": "PASS",
+  "evidence": "400 VALIDATION_FAILED"
+ },
+ {
+  "area": "Repositories",
+  "feature": "default branch read from the remote",
+  "result": "PASS",
+  "evidence": "main"
+ },
+ {
+  "area": "Defect model",
+  "feature": "training job queued (commons-lang)",
+  "result": "PASS",
+  "evidence": "202"
+ },
+ {
+  "area": "Indexing",
+  "feature": "index spring-petclinic",
+  "result": "PASS",
+  "evidence": "INDEXED in 12s, commit 500158f"
+ },
+ {
+  "area": "Indexing",
+  "feature": "spring-petclinic labelled Java from its code",
+  "result": "PASS",
+  "evidence": "Java"
+ },
+ {
+  "area": "Indexing",
+  "feature": "index psf/requests",
+  "result": "PASS",
+  "evidence": "INDEXED in 8s, commit 3c7baaa"
+ },
+ {
+  "area": "Indexing",
+  "feature": "psf/requests labelled Python from its code",
+  "result": "PASS",
+  "evidence": "Python"
+ },
+ {
+  "area": "Indexing",
+  "feature": "index spring-petclinic-rest",
+  "result": "PASS",
+  "evidence": "INDEXED in 8s, commit 0515ec8"
+ },
+ {
+  "area": "Indexing",
+  "feature": "spring-petclinic-rest labelled Java from its code",
+  "result": "PASS",
+  "evidence": "Java"
+ },
+ {
+  "area": "Indexing",
+  "feature": "second concurrent index request refused (code JOB_ALREADY_RUNNING)",
+  "result": "PASS",
+  "evidence": "202 then 400 JOB_ALREADY_RUNNING"
+ },
+ {
+  "area": "Indexing",
+  "feature": "job history with stages",
+  "result": "PASS",
+  "evidence": "2 jobs, latest stage COMPLETED"
+ },
+ {
+  "area": "Indexing",
+  "feature": "re-index of an analysed commit reuses symbols",
+  "result": "PASS",
+  "evidence": "COMPLETED Indexing completed successfully"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "symbol search",
+  "result": "PASS",
+  "evidence": "2 result(s)"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "symbol details with source location",
+  "result": "PASS",
+  "evidence": "org.springframework.samples.petclinic.owner.OwnerController line 48"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "forward dependencies",
+  "result": "PASS",
+  "evidence": "10"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "reverse dependents (blast radius) of Owner",
+  "result": "PASS",
+  "evidence": "41"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "dependency graph, PACKAGE view",
+  "result": "PASS",
+  "evidence": "6 nodes, 8 edges"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "dependency graph, CLASS view",
+  "result": "PASS",
+  "evidence": "50 nodes, 116 edges"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "dependency graph, MEMBER view",
+  "result": "PASS",
+  "evidence": "323 nodes, 641 edges"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "graph statistics incl. resolution coverage",
+  "result": "PASS",
+  "evidence": "{'commitSha': '500158f732419217507c7656904b8e6aa1bcc0d6', 'graph': {'cycleGroups': 0, 'isolatedTypes': 9, 'memberEdges': 641, 'memberEdgesByRelationship': {'CONSTRUCTOR_CALL': 41, 'EXTENDS': 8, 'FIELD_ACCESS': 250, 'FIELD_TYPE': 29, 'IMPORT': 24, 'METHOD_CALL': 249, 'PARAMETER_TYPE': 26, 'RETURN_TYPE': 27}, 'packages': 6, 'symbols': 323, 'symbolsByType': {'CLASS': 47, 'CONSTRUCTOR': 6, 'FIELD': 78"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "coupling / instability metrics",
+  "result": "PASS",
+  "evidence": "list"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "architecture violations endpoint",
+  "result": "PASS",
+  "evidence": "200"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "unresolved references listed (not hidden)",
+  "result": "PASS",
+  "evidence": "200 total 897"
+ },
+ {
+  "area": "Code intelligence",
+  "feature": "shortest dependency path OwnerController \u2192 Owner",
+  "result": "PASS",
+  "evidence": "{'edges': [{'id': 'f05b2edd-d036-3281-8fdb-89fa5cae432d', 'dependencyType': 'RETURN_TYPE', 'sourceLine': 65, 'external': False, 'occurrences': 7, 'types': ['CON"
+ },
+ {
+  "area": "History",
+  "feature": "commit history with change stats",
+  "result": "PASS",
+  "evidence": "50 commits"
+ },
+ {
+  "area": "History",
+  "feature": "weekly activity and most-changed files",
+  "result": "PASS",
+  "evidence": "['weeks', 'scannedCommits', 'commitsInWindow', 'bugfixCommitsInWindow', 'revertCommitsInWindow']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "analysis 818c413 \u2192 500158f completes",
+  "result": "PASS",
+  "evidence": "COMPLETED risk HIGH 58.5"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "deterministic: same risk as the earlier acceptance run (HIGH 58.5)",
+  "result": "PASS",
+  "evidence": "HIGH 58.5"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "semantic changes incl. 2 breaking",
+  "result": "PASS",
+  "evidence": "['OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes)', 'VetController#showVetList(int,Model,RedirectAttributes)']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "impact findings with dependency paths and evidence",
+  "result": "PASS",
+  "evidence": "27 findings, e.g. OwnerController#processFindForm(int,Owner,BindingResult,Model,RedirectAttributes) via 2 steps"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "explainable risk: factors with weight and contribution",
+  "result": "PASS",
+  "evidence": "['score', 'level', 'disclaimer', 'overall', 'symbols']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "report: pre-merge checklist",
+  "result": "PASS",
+  "evidence": "['REVIEW', 'TESTS', 'TESTS', 'REVIEW']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "report: suggested reviewers (authors excluded)",
+  "result": "PASS",
+  "evidence": "['Patrick Baumgartner', 'YiXuan Ding', 'Dave Syer']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "report: architecture drift",
+  "result": "PASS",
+  "evidence": "['No structural drift: same packages, dependencies and cycles']"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "report: defect-model status present",
+  "result": "PASS",
+  "evidence": "NOT_TRAINED"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "report: AI review marked not available (deterministic)",
+  "result": "PASS",
+  "evidence": "{'detail': 'LLM-assisted review (Phase 4) is not enabled; every finding in this report is deterministic.', 'status': 'NOT_AVAILABLE'}"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "Markdown report",
+  "result": "PASS",
+  "evidence": "8953 bytes, text/markdown;charset=UTF-8"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "test selection",
+  "result": "PASS",
+  "evidence": "{'DIRECT': 5, 'INDIRECT': 17, 'SCENARIO': 2, 'MISSING_TEST': 4}"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "security stage with Semgrep run",
+  "result": "PASS",
+  "evidence": "{'status': 'COMPLETED', 'findings': 0, 'filesScanned': 4}"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "analyses list (timeline)",
+  "result": "PASS",
+  "evidence": "1"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "same commit refused (code SAME_COMMIT)",
+  "result": "PASS",
+  "evidence": "400 SAME_COMMIT: Base and head must be different commits"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "unsafe ref refused",
+  "result": "PASS",
+  "evidence": "400"
+ },
+ {
+  "area": "Change analysis",
+  "feature": "unknown commit \u2192 readable failure",
+  "result": "PASS",
+  "evidence": "FAILED Commit or ref not found in repository: deadbeefdeadbeef"
+ },
+ {
+  "area": "Python (experimental)",
+  "feature": "change analysis of psf/requests completes",
+  "result": "PASS",
+  "evidence": "COMPLETED MEDIUM 45.3 "
+ },
+ {
+  "area": "Python (experimental)",
+  "feature": "Session#get: optional parameter added, not breaking",
+  "result": "PASS",
+  "evidence": "['PARAMETERS_EXTENDED']"
+ },
+ {
+  "area": "Python (experimental)",
+  "feature": "Session#request: type hints only",
+  "result": "PASS",
+  "evidence": "['PARAMETER_ANNOTATIONS_CHANGED']"
+ },
+ {
+  "area": "Python (experimental)",
+  "feature": "Python dependency graph",
+  "result": "PASS",
+  "evidence": "109 nodes, 311 edges"
+ },
+ {
+  "area": "Python (experimental)",
+  "feature": "Session.request calls resolved (prepare_request, send)",
+  "result": "PASS",
+  "evidence": "[{'endLine': 375, 'id': '0ed0085d-5d72-4601-9098-12586b78bee1', 'ownerTypeId': '0ed0085d-5d72-4601-9098-12586b78bee1', 'packageName': 'requests', 'qua"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "upload JUNIT",
+  "result": "PASS",
+  "evidence": "201 {\"tests\": 4, \"files\": 1, \"byStatus\": {\"PASSED\": 4}}"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "upload JACOCO",
+  "result": "PASS",
+  "evidence": "201 {\"sourceFiles\": 1, \"methods\": 12, \"lineCoverage\": 69.0, \"branchCoverage\": 56.3, \"linesCovered\": 2784, \"linesMissed\": 125"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "upload PIT",
+  "result": "PASS",
+  "evidence": "201 {\"mutants\": 25, \"byStatus\": {\"KILLED\": 16, \"NO_COVERAGE\": 1, \"SURVIVED\": 8}, \"mutationScore\": 64.0}"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "upload DEPENDENCY_CHECK",
+  "result": "PASS",
+  "evidence": "201 {\"vulnerabilities\": 1, \"vulnerableDependencies\": 1, \"bySeverity\": {\"CRITICAL\": 1}}"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "XXE payload rejected (code INVALID_REPORT, entity not expanded)",
+  "result": "PASS",
+  "evidence": "400 INVALID_REPORT: Could not parse JaCoCo report: ParseError at [row,col]:[3,20]\nMessage: The entity \"xxe\" wa"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "unknown commit rejected",
+  "result": "PASS",
+  "evidence": "400"
+ },
+ {
+  "area": "Quality reports",
+  "feature": "reports listed",
+  "result": "PASS",
+  "evidence": "4"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "snapshot (packages, coupling, cycles)",
+  "result": "PASS",
+  "evidence": "17 packages, 19 edges, 0 cycles"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "hotspots (churn \u00d7 complexity)",
+  "result": "PASS",
+  "evidence": "87 files"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "history backfill job",
+  "result": "PASS",
+  "evidence": "COMPLETED Architecture history of 4 commits ready"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "trend over analysed commits",
+  "result": "PASS",
+  "evidence": "4 points"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "compare oldest \u2192 newest commit",
+  "result": "PASS",
+  "evidence": "['8 new package dependencies, e.g. org.springframework.samples.petclinic.mapper \u2192 org.springframework.samples.petclinic.model', '2 new architecture rule violation(s)']"
+ },
+ {
+  "area": "Architecture twin",
+  "feature": "unknown commit \u2192 404",
+  "result": "PASS",
+  "evidence": "404"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "unsigned delivery \u2192 401",
+  "result": "PASS",
+  "evidence": "401"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "wrong signature \u2192 401",
+  "result": "PASS",
+  "evidence": "401"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "signed ping accepted",
+  "result": "PASS",
+  "evidence": "202 {'status': 'ACCEPTED', 'detail': 'pong (hook 1)', 'analysisIds': []}"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "redelivery de-duplicated",
+  "result": "PASS",
+  "evidence": "200 {'detail': 'Delivery 2d3856a1-bedd-47ad-b158-1ca7404c2baf was already received', 'status': 'DUPLICATE'}"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "form-encoded delivery \u2192 415",
+  "result": "PASS",
+  "evidence": "415"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "App status page (webhook secret configured, App not registered)",
+  "result": "PASS",
+  "evidence": "{\"appConfigured\": false, \"webhookSecretConfigured\": true, \"checksEnabled\": true, \"checkName\": \"ChangeImpact AI\", \"failOn\": \"CRITICAL\", \"analyzeDraftPullRequests"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "delivery log",
+  "result": "PASS",
+  "evidence": "200"
+ },
+ {
+  "area": "GitHub webhooks",
+  "feature": "pull-request list",
+  "result": "PASS",
+  "evidence": "200"
+ },
+ {
+  "area": "Dashboard",
+  "feature": "team dashboard",
+  "result": "PASS",
+  "evidence": "{'repositories': 4, 'indexedRepositories': 3, 'analyses': 3, 'distinctChanges': 2, 'failedAnalyses': 1, 'highRiskChanges': 1, 'openPullRequests': 0, 'openHighRiskPullRequests': 0, 'securityFindingsHighOrCritical': 2}"
+ },
+ {
+  "area": "Defect model",
+  "feature": "small history \u2192 not used (too few labels)",
+  "result": "PASS",
+  "evidence": "INSUFFICIENT_LABELS: Only 25 bug-introducing commits in training and 5 in test (need 30 and 10)"
+ },
+ {
+  "area": "Defect model",
+  "feature": "commons-lang \u2192 accepted, beats churn baseline",
+  "result": "PASS",
+  "evidence": "COMPLETED ACCEPTED: Test ROC-AUC 0.772 (churn baseline 0.725) on 815 later commits"
+ },
+ {
+  "area": "Defect model",
+  "feature": "calibration and baselines reported",
+  "result": "PASS",
+  "evidence": "AUC 0.7715938722294654 Brier 0.052257600060271116 ECE 0.014004086127369688"
+ },
+ {
+  "area": "Defect model",
+  "feature": "recent commits scored with drivers",
+  "result": "PASS",
+  "evidence": "300 commits"
+ },
+ {
+  "area": "Security",
+  "feature": "other user cannot see the repository (404)",
+  "result": "PASS",
+  "evidence": "404"
+ },
+ {
+  "area": "Security",
+  "feature": "other user cannot see the analysis (404)",
+  "result": "PASS",
+  "evidence": "404"
+ },
+ {
+  "area": "Security",
+  "feature": "other user cannot see the defect model (404)",
+  "result": "PASS",
+  "evidence": "404"
+ },
+ {
+  "area": "Security",
+  "feature": "non-admin \u2192 403 on admin operation",
+  "result": "PASS",
+  "evidence": "403"
+ },
+ {
+  "area": "Security",
+  "feature": "admin can run retention",
+  "result": "PASS",
+  "evidence": "200 {\"analyses\": 0, \"webhookDeliveries\": 0, \"qualityReports\": 0, \"deletedRepositoryWorkspaces\": 0, \"staleSnapshots\": 0}"
+ },
+ {
+  "area": "Security",
+  "feature": "login rate limit \u2192 429",
+  "result": "PASS",
+  "evidence": "[401, 401, 401, 401, 401, 401, 401, 401, 401, 401, 429, 429, 429, 429]"
+ }
+]

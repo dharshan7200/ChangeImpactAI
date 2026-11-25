@@ -1,0 +1,145 @@
+# ChangeImpact AI — bundled Semgrep rules for Java (run offline with --metrics=off).
+# Static pattern checks: a match is a lead for review, not proof of a vulnerability.
+rules:
+  - id: cia.java.sql-injection.string-concat-query
+    languages: [java]
+    severity: ERROR
+    message: SQL/JPQL built by string concatenation is passed to a query API; use bind parameters.
+    metadata: {category: SQL, cwe: "CWE-89: SQL Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: $X.createQuery($A + $B, ...)
+          - pattern: $X.createNativeQuery($A + $B, ...)
+          - pattern: $X.executeQuery($A + $B)
+          - pattern: $X.executeUpdate($A + $B)
+          - pattern: $X.execute($A + $B)
+          - pattern: $X.prepareStatement($A + $B, ...)
+          - pattern: $X.query($A + $B, ...)
+          - pattern: $X.queryForObject($A + $B, ...)
+          - pattern: $X.queryForList($A + $B, ...)
+          - pattern: $X.update($A + $B, ...)
+      # concatenating only string literals/constants is not injection
+      - pattern-not: $X.$M("..." + "...", ...)
+
+  - id: cia.java.crypto.weak-hash
+    languages: [java]
+    severity: WARNING
+    message: Weak hash algorithm (MD5/SHA-1/MD2) must not protect passwords or integrity.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-328: Use of Weak Hash"}
+    pattern-either:
+      - pattern: java.security.MessageDigest.getInstance("MD5")
+      - pattern: java.security.MessageDigest.getInstance("MD2")
+      - pattern: java.security.MessageDigest.getInstance("SHA-1")
+      - pattern: java.security.MessageDigest.getInstance("SHA1")
+
+  - id: cia.java.crypto.weak-cipher
+    languages: [java]
+    severity: ERROR
+    message: Insecure cipher or mode (DES/3DES/RC4/ECB, or bare "AES" which defaults to ECB).
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-327: Broken or Risky Cryptographic Algorithm"}
+    patterns:
+      - pattern: javax.crypto.Cipher.getInstance("$ALG", ...)
+      - metavariable-regex:
+          metavariable: $ALG
+          regex: (?i)^(DES|DESede|RC2|RC4|Blowfish|AES)(/ECB.*)?$|.*/ECB/.*
+
+  - id: cia.java.secrets.hardcoded-credential
+    languages: [java]
+    severity: ERROR
+    message: Hard-coded credential-like value; load secrets from configuration or a vault.
+    metadata: {category: SENSITIVE_DATA, cwe: "CWE-798: Use of Hard-coded Credentials"}
+    patterns:
+      - pattern-either:
+          - pattern: $T $NAME = "$VALUE";
+          - pattern: $NAME = "$VALUE";
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: (?i).*(password|passwd|secret|api_?key|access_?token|private_?key).*
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: ^.{4,}$
+
+  - id: cia.java.injection.command-execution
+    languages: [java]
+    severity: ERROR
+    message: Process execution with a non-literal command; validate or avoid user-controlled input.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-78: OS Command Injection"}
+    patterns:
+      - pattern-either:
+          - pattern: Runtime.getRuntime().exec($CMD, ...)
+          - pattern: new ProcessBuilder($CMD, ...)
+      - pattern-not: Runtime.getRuntime().exec("...", ...)
+      - pattern-not: new ProcessBuilder("...", ...)
+
+  - id: cia.java.deserialization.object-input-stream
+    languages: [java]
+    severity: ERROR
+    message: Java native deserialization of untrusted data can execute code.
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-502: Deserialization of Untrusted Data"}
+    pattern: (java.io.ObjectInputStream $OIS).readObject()
+
+  - id: cia.java.xml.xxe-document-builder
+    languages: [java]
+    severity: WARNING
+    message: XML parser created without disabling DOCTYPE/external entities (XXE).
+    metadata: {category: INPUT_HANDLING, cwe: "CWE-611: XML External Entity Reference"}
+    patterns:
+      - pattern: $F = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+      - pattern-not-inside: |
+          $F = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+          ...
+          $F.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
+  - id: cia.java.tls.trust-all
+    languages: [java]
+    severity: ERROR
+    message: Hostname verification disabled; TLS no longer authenticates the server.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-297: Improper Validation of Certificate with Host Mismatch"}
+    pattern-either:
+      - pattern: |
+          new HostnameVerifier() { ... boolean verify(...) { return true; } ... }
+      - pattern: "($S, $SS) -> true"
+
+  - id: cia.java.spring.permit-all-any-request
+    languages: [java]
+    severity: WARNING
+    message: anyRequest().permitAll() makes every endpoint public.
+    metadata: {category: AUTHORIZATION, cwe: "CWE-862: Missing Authorization"}
+    pattern: $X.anyRequest().permitAll()
+
+  - id: cia.java.spring.csrf-disabled
+    languages: [java]
+    severity: INFO
+    message: CSRF protection disabled; acceptable only for stateless token-authenticated APIs.
+    metadata: {category: AUTHORIZATION, cwe: "CWE-352: Cross-Site Request Forgery"}
+    pattern-either:
+      - pattern: $H.csrf($C -> $C.disable())
+      - pattern: $H.csrf(AbstractHttpConfigurer::disable)
+      - pattern: $H.csrf().disable()
+
+  - id: cia.java.logging.sensitive-value
+    languages: [java]
+    severity: WARNING
+    message: A credential-like value is written to a log.
+    metadata: {category: SENSITIVE_DATA, cwe: "CWE-532: Insertion of Sensitive Information into Log File"}
+    patterns:
+      - pattern: $LOG.$LEVEL(..., $V, ...)
+      - metavariable-regex:
+          metavariable: $LEVEL
+          regex: ^(trace|debug|info|warn|error)$
+      - metavariable-regex:
+          metavariable: $V
+          regex: (?i)^(password|passwd|secret|token|accessToken|apiKey|privateKey)$
+
+  - id: cia.java.random.insecure-for-security
+    languages: [java]
+    severity: WARNING
+    message: java.util.Random is predictable; use SecureRandom for tokens, keys or salts.
+    metadata: {category: CRYPTOGRAPHY, cwe: "CWE-330: Use of Insufficiently Random Values"}
+    patterns:
+      - pattern: new java.util.Random(...)
+      - pattern-inside: |
+          $RET $METHOD(...) { ... }
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: (?i).*(token|secret|password|salt|key|nonce|otp|session).*

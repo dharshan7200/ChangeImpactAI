@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Automatically bypass localtunnel 511 interstitial
+      try {
+        document.cookie = "bypass-tunnel-reminder=1; path=/; max-age=604800; SameSite=Lax";
+        document.cookie = "bypass-tunnel-reminder=1; path=/; max-age=604800; SameSite=None; Secure";
+      } catch (e) {}
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0b0f16" />
+    <meta name="description" content="ChangeImpact AI shows what a code change affects before it ships: impacted code, risk, tests to run and security findings." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChangeImpact AI — Change impact intelligence</title>
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" crossorigin="use-credentials" src="/src/main.tsx"></script>
+  </body>
+</html>
+

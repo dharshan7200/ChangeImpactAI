@@ -1,0 +1,253 @@
+{
+ "repository": "psf/requests @ 3c7baaa",
+ "queries": 15,
+ "summary": {
+  "fts": {
+   "hit@1": 0.533,
+   "hit@5": 0.867,
+   "mrr@10": 0.683,
+   "medianMs": 16
+  },
+  "vector": {
+   "hit@1": 0.8,
+   "hit@5": 1.0,
+   "mrr@10": 0.863,
+   "medianMs": 399
+  },
+  "hybrid": {
+   "hit@1": 0.867,
+   "hit@5": 0.933,
+   "mrr@10": 0.896,
+   "medianMs": 130
+  },
+  "auto": {
+   "hit@1": 0.867,
+   "hit@5": 0.933,
+   "mrr@10": 0.896,
+   "medianMs": 130
+  },
+  "rrf_w0.25": {
+   "hit@1": 0.8,
+   "hit@5": 0.933,
+   "mrr@10": 0.878
+  },
+  "rrf_w0.5": {
+   "hit@1": 0.867,
+   "hit@5": 0.933,
+   "mrr@10": 0.908
+  }
+ },
+ "fallbacks": [],
+ "perQuery": [
+  {
+   "q": "should_strip_auth",
+   "fts": 6,
+   "vector": 1,
+   "hybrid": 3,
+   "auto": 3,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 2,
+   "vectorTop3": [
+    "sessions.SessionRedirectMixin#should_strip_auth",
+    "tests.test_requests.TestRequests#test_should_strip_auth_host_change",
+    "tests.test_requests.TestRequests#test_should_strip_auth_port_change"
+   ]
+  },
+  {
+   "q": "resolve_redirects",
+   "fts": 2,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "sessions.SessionRedirectMixin#resolve_redirects",
+    "sessions.SessionRedirectMixin",
+    "tests.test_requests#test_requests_are_updated_each_time"
+   ]
+  },
+  {
+   "q": "merge_environment_settings",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "sessions.Session#merge_environment_settings",
+    "sessions#merge_setting",
+    "sessions#merge_hooks"
+   ]
+  },
+  {
+   "q": "prepare_body",
+   "fts": 2,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.PreparedRequest#prepare_body",
+    "models.PreparedRequest#prepare",
+    "models.Request#prepare"
+   ]
+  },
+  {
+   "q": "get_auth_from_url",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#get_auth_from_url",
+    "tests.test_utils#test_get_auth_from_url",
+    "utils#get_netrc_auth"
+   ]
+  },
+  {
+   "q": "super_len",
+   "fts": null,
+   "vector": 5,
+   "hybrid": 9,
+   "auto": 9,
+   "rrf_w0.25": 6,
+   "rrf_w0.5": 8,
+   "vectorTop3": [
+    "tests.test_utils.TestSuperLen#test_super_len_with__len__",
+    "tests.test_utils.TestSuperLen#test_super_len_with_no__len__",
+    "tests.test_utils.TestSuperLen#test_string"
+   ]
+  },
+  {
+   "q": "default_user_agent",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#default_user_agent",
+    "utils#default_headers",
+    "tests.test_requests.TestRequests#test_user_agent_transfers"
+   ]
+  },
+  {
+   "q": "extract_cookies_to_jar",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "cookies#extract_cookies_to_jar",
+    "models.PreparedRequest#prepare_cookies",
+    "cookies#_copy_cookie_jar"
+   ]
+  },
+  {
+   "q": "HTTPAdapter send",
+   "fts": 3,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "adapters.HTTPAdapter#send",
+    "adapters.BaseAdapter#send",
+    "adapters.BaseAdapter"
+   ]
+  },
+  {
+   "q": "iter_lines",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.Response#iter_lines",
+    "models.Response#iter_lines",
+    "models.Response#iter_lines"
+   ]
+  },
+  {
+   "q": "RequestsCookieJar set_cookie",
+   "fts": 4,
+   "vector": 4,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 2,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "cookies.RequestsCookieJar#update",
+    "cookies.RequestsCookieJar#set",
+    "models.PreparedRequest#prepare_cookies"
+   ]
+  },
+  {
+   "q": "PreparedRequest prepare_auth",
+   "fts": 2,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "models.PreparedRequest#prepare_auth",
+    "auth.HTTPBasicAuth#__call__",
+    "auth.HTTPDigestAuth#__call__"
+   ]
+  },
+  {
+   "q": "to_key_val_list",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "utils#to_key_val_list",
+    "utils#to_key_val_list",
+    "utils#to_key_val_list"
+   ]
+  },
+  {
+   "q": "select_proxy",
+   "fts": 1,
+   "vector": 2,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "tests.test_utils#test_select_proxies",
+    "utils#select_proxy",
+    "adapters.HTTPAdapter#proxy_manager_for"
+   ]
+  },
+  {
+   "q": "dispatch_hook",
+   "fts": 1,
+   "vector": 1,
+   "hybrid": 1,
+   "auto": 1,
+   "rrf_w0.25": 1,
+   "rrf_w0.5": 1,
+   "vectorTop3": [
+    "hooks#dispatch_hook",
+    "tests.test_hooks",
+    "tests.test_hooks#test_hooks"
+   ]
+  }
+ ]
+}
